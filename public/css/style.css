@@ -273,3 +273,7 @@ footer {
   display: flex;
   flex-direction: column;
 }
+
+.title{
+  font:bold 20px arial;
+}
