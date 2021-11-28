@@ -31,27 +31,13 @@
     </main>
 </div>
 {{else}}
-<div id="logindiv">
-  <div class="column">
-  <h2 class="title pb-4">login</h2><hr />
-  <form class="login-form">
-    <div>
-      <label for="username-login">username:</label>
-      <input type="text" id="username-login" />
-    </div>
-    <div>
-      <label for="password-login">password:</label>
-      <input type="password" id="password-login" />
-    </div>
-    <div>
-      <button type="submit" class="button is-primary">login</button>
-      <a href="/signup"><button
-          type="button"
-          class="button is-danger"
-        >signup</button></a>
-    </div>
-   </form>
-</div>
+<div id="logindiv" style="text-align:center;font-family:arial">
+<h2 style='margin-top:100px'>MY FRONTYARD</h2>
+<br/><br/>
+ <a href="/login"><button id="login" class="button">Login</button></a>
+<main>
+{{{ body }}}
+</main>
 </div>            
 {{/if}}
 
@@ -61,7 +47,6 @@
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA_RsyAo4HyOMUAfpA-zsXIOXpIMMh7ey8&libraries=drawing,geometry,visualization&callback=initMap"
          async defer></script>  
 {{else}}
-<script src="/js/login.js"></script>
 {{/if}}
 
 </body>
