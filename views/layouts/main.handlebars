@@ -10,38 +10,59 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <meta name="apple-mobile-web-app-title" content="XMAS_Lights">
 <link rel="apple-touch-icon" href="/images/icon.png">
-  <title>XMAS LIGHTS</title>
+  <title>MY FRONTYARD</title>
   <link rel="stylesheet" href="/css/style.css">
 </head>
+{{#if loggedIn}}
 <div id="map"></div>
-<img id="menubtn" src="/images/menu-icon.png" >
+  <img id="menubtn" src="/images/menu-icon.png" >
   <div id="menu">
-        <img id="menuclosebtn" src="/images/close.png" >
-        <h1 style="margin-left:10px">XMAS LIGHTS</h1><br/>
-            {{#if loggedIn}}
-            <div style='width:100%'> 
-            <a href="/dashboard/create/" class="navbar-item"><img id="register" src="/images/register.png"> </a>
-            <a href="/dashboard/search/" class="navbar-item"><img id="search" src="/images/search.png"> </a>
-            <a href="/event" class="navbar-item"><img id="event" src="/images/event.png"></a>
-            <button id="logout" class="button" style="margin-left:20px;margin-top:-100px">Logout</button>
-            </div>
-            <br/><br/>
-            {{else}}
-            <a href="/login"><button id="login" class="button">Login</button></a>
-            {{/if}}
-
+    <img id="menuclosebtn" src="/images/close.png" >
+    <h1 style="margin-left:10px">MY FRONTYARD</h1><br/>
+    <div style='width:100%'> 
+    <a href="/dashboard/create/" class="navbar-item"><img id="register" src="/images/register.png"> </a>
+    <a href="/dashboard/search/" class="navbar-item"><img id="search" src="/images/search.png"> </a>
+    <a href="/event" class="navbar-item"><img id="event" src="/images/event.png"></a>
+    <button id="logout" class="button" style="margin-left:20px;margin-top:-100px">Logout</button>
+    </div>
+    <br/><br/>
     <main>
-            {{{ body }}}
+    {{{ body }}}
     </main>
-
-  </div>
+</div>
+{{else}}
+<div id="logindiv">
+  <div class="column">
+  <h2 class="title pb-4">login</h2><hr />
+  <form class="login-form">
+    <div>
+      <label for="username-login">username:</label>
+      <input type="text" id="username-login" />
+    </div>
+    <div>
+      <label for="password-login">password:</label>
+      <input type="password" id="password-login" />
+    </div>
+    <div>
+      <button type="submit" class="button is-primary">login</button>
+      <a href="/signup"><button
+          type="button"
+          class="button is-danger"
+        >signup</button></a>
+    </div>
+   </form>
+</div>
+</div>            
+{{/if}}
 
 {{#if loggedIn}}
 <script src="/js/logout.js"></script>
-{{/if}}
 <script src="/js/index.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA_RsyAo4HyOMUAfpA-zsXIOXpIMMh7ey8&libraries=drawing,geometry,visualization&callback=initMap"
          async defer></script>  
-</body>
+{{else}}
+<script src="/js/login.js"></script>
+{{/if}}
 
+</body>
 </html>
