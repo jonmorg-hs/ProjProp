@@ -19,6 +19,8 @@ let currentlat, currentlng;
 var markerid;
 
 var map;
+var mapmarkers = [];
+var route_pts = [];
 
 var menubtn = document.getElementById("menubtn");
 var menuclosebtn = document.getElementById("menuclosebtn");
@@ -57,7 +59,10 @@ function initMap() {
 }
 
 function getmarkers(markers) {
-  alert(markers);
+  for (i in mapmarkers) {
+    mapmarkers[i].setMap(null);
+  }
+
   var marker, i;
   for (i = 0; i < markers.length; i++) {
     const propertyDiv = document.createElement("div");
@@ -88,6 +93,7 @@ function getmarkers(markers) {
         anchor: new google.maps.Point(15, 50),
       },
     });
+    mapmarkers.push(marker);
     google.maps.event.addListener(
       marker,
       "click",

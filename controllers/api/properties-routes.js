@@ -46,8 +46,8 @@ router.post("/search/", withAuth, (req, res) => {
           output.push(marker);
         }
       }
-      console.log(JSON.stringify(output));
-      return res.json(output);
+      console.log(output);
+      res.json(output);
     })
     .catch((err) => {
       console.log(err);
