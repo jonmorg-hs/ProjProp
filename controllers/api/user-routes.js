@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { User, Post, Comment } = require("../../models");
+const { User, Post, Comment, Properties } = require("../../models");
 const withAuth = require("../../utils/auth");
 
 router.get("/", (req, res) => {
@@ -48,45 +48,104 @@ router.get("/:id", (req, res) => {
 });
 
 router.post("/", (req, res) => {
-  User.create({
-    username: req.body.username,
-    password: req.body.password,
-  }).then((dbUserData) => {
-    req.session.save(() => {
-      req.session.user_id = dbUserData.id;
-      req.session.username = dbUserData.username;
-      req.session.loggedIn = true;
-
-      res.json(dbUserData);
-    });
+  Properties.findAll({
+    where: {
+      user_id: req.session.id,
+    },
+  }).then((propertyData) => {
+    if (propertyData.length > 0) {
+      User.create({
+        username: req.body.username,
+        password: req.body.password,
+      }).then((dbUserData) => {
+        req.session.save(() => {
+          req.session.user_id = dbUserData.id;
+          req.session.username = dbUserData.username;
+          req.session.loggedIn = true;
+          req.session.registered = true;
+          res.json(dbUserData);
+        });
+      });
+    } else {
+      User.create({
+        username: req.body.username,
+        password: req.body.password,
+      }).then((dbUserData) => {
+        req.session.save(() => {
+          req.session.user_id = dbUserData.id;
+          req.session.username = dbUserData.username;
+          req.session.loggedIn = true;
+          req.session.registered = false;
+          res.json(dbUserData);
+        });
+      });
+    }
   });
 });
 
 router.post("/login", (req, res) => {
-  User.findOne({
+  Properties.findAll({
     where: {
-      username: req.body.username,
+      user_id: req.session.id,
     },
-  }).then((dbUserData) => {
-    if (!dbUserData) {
-      res.status(400).json({ message: "No user with that username exists!" });
-      return;
+  }).then((propertyData) => {
+    if (propertyData.length > 0) {
+      User.findOne({
+        where: {
+          username: req.body.username,
+        },
+      }).then((dbUserData) => {
+        if (!dbUserData) {
+          res
+            .status(400)
+            .json({ message: "No user with that username exists!" });
+          return;
+        }
+
+        const validPassword = dbUserData.checkPassword(req.body.password);
+
+        if (!validPassword) {
+          res.status(400).json({ message: "Incorrect password!" });
+          return;
+        }
+
+        req.session.save(() => {
+          req.session.user_id = dbUserData.id;
+          req.session.username = dbUserData.username;
+          req.session.loggedIn = true;
+          req.session.registered = true;
+          res.json({ user: dbUserData, message: "You are now logged in!" });
+        });
+      });
+    } else {
+      User.findOne({
+        where: {
+          username: req.body.username,
+        },
+      }).then((dbUserData) => {
+        if (!dbUserData) {
+          res
+            .status(400)
+            .json({ message: "No user with that username exists!" });
+          return;
+        }
+
+        const validPassword = dbUserData.checkPassword(req.body.password);
+
+        if (!validPassword) {
+          res.status(400).json({ message: "Incorrect password!" });
+          return;
+        }
+
+        req.session.save(() => {
+          req.session.user_id = dbUserData.id;
+          req.session.username = dbUserData.username;
+          req.session.loggedIn = true;
+          req.session.registered = false;
+          res.json({ user: dbUserData, message: "You are now logged in!" });
+        });
+      });
     }
-
-    const validPassword = dbUserData.checkPassword(req.body.password);
-
-    if (!validPassword) {
-      res.status(400).json({ message: "Incorrect password!" });
-      return;
-    }
-
-    req.session.save(() => {
-      req.session.user_id = dbUserData.id;
-      req.session.username = dbUserData.username;
-      req.session.loggedIn = true;
-
-      res.json({ user: dbUserData, message: "You are now logged in!" });
-    });
   });
 });
 

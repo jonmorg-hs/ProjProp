@@ -1,9 +1,12 @@
 const { Model, DataTypes } = require("sequelize");
 const sequelize = require("../config/connection");
 
-class Property extends Model {}
+// create our Post model
+class Properties extends Model {}
 
-Property.init({
+// create fields/columns for Post model
+Properties.init(
+  {
   id: {
     type: DataTypes.INTEGER,
     allowNull: false,
@@ -26,14 +29,6 @@ Property.init({
     type: DataTypes.FLOAT,
     allowNull: false,
   },
-  event_id: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: "event",
-      key: "id",
-    },
-  },
   user_id: {
     type: DataTypes.INTEGER,
     references: {
@@ -41,11 +36,21 @@ Property.init({
       key: "id",
     },
   },
-  sequelize,
-  timestamps: false,
-  freezeTableName: true,
-  underscored: true,
-  modelName: "property",
-});
+  created_at: {
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
+  },
+  update_at: {
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
+  },
+  },  
+  {
+    sequelize,
+    freezeTableName: true,
+    underscored: true,
+    modelName: "properties",
+  }
+);
 
-module.exports = Property;
+module.exports = Properties;

@@ -1,16 +1,16 @@
 <div class="card">
   <header class="card-header">
     <div class="column">
-      <a href="/post/{{id}}">{{title}} </a></p>
+      <a href="#" onclick="showMarker({{property.id}})">{{property.address}} </a></p>
     </div>
   </header>
 
  <div class="card-content">
     <div class="content">
-        {{post_content}}
+        {{property.lat}}
     </div>
     <div class="post-footer">
-    <b>{{user.username}}</b> | {{format_date created_at}} | <a href="/post/{{id}}">{{comments.length}} {{format_plural "comment" comments.length}}</a>
+    <!--<b>{{user.username}}</b> | {{format_date created_at}} | <a href="/post/{{id}}">{{comments.length}} {{format_plural "comment" comments.length}}</a>-->
     </div>
         
     </div>

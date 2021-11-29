@@ -1,7 +1,6 @@
     <div style="position:relative;height:60px">
          
         <label class="heading" style="margin-top:20px;margin-bottom:15px">My Saved Properties</label>
-        <!--<a href="/dashboard/create/" style="position:absolute;top:-10px;right:10px"><button id="create-post" class="button">New post</button></a>-->   
         <hr>
 {{#if posts.length}}
     </div>
@@ -9,7 +8,8 @@
     {{#each posts as |post|}}
         {{> post-info post}}
         
-            <a href="/dashboard/edit/{{post.id}}"><button class="button">edit post</button></a>
+            <a href="/dashboard/review/{{post.property.id}}"><button class="button">review</button></a>
+            <a href="/dashboard/delete/{{post.property.id}}"><button class="button">remove</button></a>
         </div>
     {{/each}}
 

@@ -1,32 +1,36 @@
-async function registerHandler(event) {
-  event.preventDefault();
-  alert(document.querySelector("#address-register").value.trim());
-  const address = document.querySelector("#address-register").value.trim();
-  const suburb = document.querySelector("#suburb-register").value.trim();
-  const city = document.querySelector("#city-register").value.trim();
-  const postcode = document.querySelector("#postcode-register").value.trim();
+$('.datepicker').datepicker({dateFormat: 'd/m/yy',firstDay: 1,changeMonth: true,changeYear: true});
+$('.timepicker').timepicker({timeFormat:'H:i'});
 
-  if (address && suburb && city && postcode) {
-    const response = await fetch("/api/properties/register", {
+async function registereventHandler(event) {
+  event.preventDefault();
+
+  const type = document.querySelector("#type-event").value;
+  const start_date = document.querySelector("#startdate-event").value;
+  const end_date = document.querySelector("#enddate-event").value;
+  const start_time = document.querySelector("#starttime-event").value;
+  const end_time = document.querySelector("#endtime-event").value;
+
+  if (type && start_date && end_date && start_time && end_time) {
+    const response = fetch("/api/events", {
       method: "post",
       body: JSON.stringify({
-        username: username,
-        password: password,
+        type,
+        start_date,
+        end_date,
+        start_time,
+        end_time
       }),
       headers: { "Content-Type": "application/json" },
     });
 
     if (response.ok) {
-      document.location.replace("/dashboard");
+      alert('Event registered');
     } else {
-      alert(
-        "Login credentials do not exist, please sign up or check your username or password"
-      );
-      //alert(response.statusText);
+      alert(response.statusText);
     }
   }
 }
 
 document
-  .querySelector(".register-form")
-  .addEventListener("submit", registerHandler);
+  .querySelector(".event-form")
+  .addEventListener("submit", registereventHandler);

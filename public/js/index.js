@@ -15,21 +15,10 @@ var currentposmarker = [];
 var currentpos;
 var currentPositionMarker;
 var infowindow;
+let currentlat, currentlng;
+var markerid;
 
 var map;
-
-var markers = [
-  { address: "35 Otterington Grove, Ivanhoe", lat: -37.77669, lng: 145.05574 },
-  { address: "150 The Boulevard, Ivanhoe", lat: -37.77347, lng: 145.05055 },
-  { address: "158 The Boulevard, Ivanhoe", lat: -37.77385, lng: 145.05109 },
-  { address: "170 The Boulevard, Ivanhoe", lat: -37.77461, lng: 145.05202 },
-  { address: "180 The Boulevard, Ivanhoe", lat: -37.77503, lng: 145.05265 },
-  { address: "144 The Boulevard, Ivanhoe", lat: -37.77278, lng: 145.04945 },
-  { address: "197 The Boulevard, Ivanhoe", lat: -37.7765, lng: 145.05475 },
-  { address: "205 The Boulevard, Ivanhoe", lat: -37.77705, lng: 145.05542 },
-  { address: "223 The Boulevard, Ivanhoe", lat: -37.777759, lng: 145.05661 },
-];
-var route_pts = [];
 
 var menubtn = document.getElementById("menubtn");
 var menuclosebtn = document.getElementById("menuclosebtn");
@@ -65,7 +54,10 @@ function initMap() {
   }
 
   infowindow = new google.maps.InfoWindow();
+}
 
+function getmarkers(markers) {
+  alert(markers);
   var marker, i;
   for (i = 0; i < markers.length; i++) {
     const propertyDiv = document.createElement("div");
@@ -87,6 +79,7 @@ function initMap() {
     marker = new google.maps.Marker({
       position: point,
       map: map,
+      id: markers[i]["id"],
       title: markers[i]["address"],
       icon: {
         url: "/images/tree.png",
@@ -100,35 +93,37 @@ function initMap() {
       "click",
       (function (marker, i) {
         return function () {
-          var html = markers[i]["address"] + "<br/>REVIEW:";
-          infowindow.setContent(html);
-          infowindow.setOptions({ pixelOffset: new google.maps.Size(0, -20) });
-          infowindow.setPosition(marker.position);
-          infowindow.open(map);
+          //var html =
+          //  "<div style='text-align:centre'>" +
+          //  markers[i]["address"] +
+          //  "<br/><br/><button id='saveproperty' class='button' onclick=\"saveProperty(" +
+          //  markers[i]["id"] +
+          //  ")\")>Save</button><br/><br/><button id='reviewproperty' class='button' onclick=\"reviewProperty(" +
+          //  markers[i]["id"] +
+          //  ')")>Review</button><br/>';
+          //infowindow.setContent(html);
+          //infowindow.setOptions({ pixelOffset: new google.maps.Size(0, -20) });
+          //infowindow.setPosition(marker.position);
+          // infowindow.open(map);
+          $("#menu").show();
+          var markerid = markers[i]["id"];
+          const response = fetch(`/api/properties/${markerid}`, {
+            method: "GET",
+          });
+
+          if (response.ok) {
+            document.location.replace("/dashboard/");
+          } else {
+            alert(response.statusText);
+          }
         };
       })(marker, i)
     );
   }
 }
 
-function registerProperty() {
-  var data = {};
-  data.street = $("#street").val();
-  data.suburb = $("#suburb").val();
-  data.postcode = $("#postcode").val();
-  var address = "176 The Boulevard, Ivanhoe";
-  $.getJSON(
-    "https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyAjyk6thum-ylKNZU0QCa2ZnuS4uoNY4hM&address=" +
-      address +
-      "&sensor=false",
-    null,
-    function (data) {
-      console.log(data);
-      var p = data.results[0].geometry.location;
-      var lat = p.lat;
-      var lng = p.lng;
-    }
-  );
+function showMarker(id) {
+  alert(id);
 }
 
 function displayAndWatch(position) {
@@ -169,6 +164,9 @@ function locError(error) {
 }
 
 function setCurrentPosition(pos) {
+  currentlat = pos.coords.latitude;
+  currentlng = pos.coords.longitude;
+
   for (i in currentposmarker) {
     currentposmarker[i].setMap(null);
   }

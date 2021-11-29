@@ -10,8 +10,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <meta name="apple-mobile-web-app-title" content="XMAS_Lights">
 <link rel="apple-touch-icon" href="/images/icon.png">
-  <title>MY FRONTYARD</title>
-  <link rel="stylesheet" href="/css/style.css">
+<title>MY FRONTYARD</title>
+<link rel="stylesheet" href="/css/style.css">
+<script src="/js/jquery.min.js"></script>
+<script src="/js/jquery-ui.min.js"></script>
+<script type="text/javascript" src="/js/jquery.ui.timepicker.js"></script>
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<link href="/css/jquery.timepicker.css" rel="stylesheet">  
+<script src="/js/jquery.timepicker.js"></script>
 </head>
 {{#if loggedIn}}
 <div id="map"></div>
@@ -20,10 +27,13 @@
     <img id="menuclosebtn" src="/images/close.png" >
     <h1 style="margin-left:10px">MY FRONTYARD</h1><br/>
     <div style='width:100%'> 
-    <a href="/dashboard/create/" class="navbar-item"><img id="register" src="/images/register.png"> </a>
-    <a href="/dashboard/search/" class="navbar-item"><img id="search" src="/images/search.png"> </a>
+    {{#if registered}}  
     <a href="/dashboard/event/" class="navbar-item"><img id="event" src="/images/event.png"></a>
-    <button id="logout" class="button" style="margin-left:20px;margin-top:-100px">Logout</button>
+    {{else}}
+    <a href="/dashboard/create/" class="navbar-item"><img id="register" src="/images/register.png"> </a>
+    {{/if}}
+    <a href="/dashboard/search/" class="navbar-item"><img id="search" src="/images/search.png"> </a>
+    <img id="logout" class="navbar-item" src="/images/logout.png" style="width:65px"/>
     </div>
     <br/><br/>
     <main>
@@ -48,6 +58,9 @@
          async defer></script>  
 {{else}}
 {{/if}}
-
+<script
+  src="https://code.jquery.com/jquery-3.6.0.min.js"
+  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+  crossorigin="anonymous"></script>
 </body>
 </html>
