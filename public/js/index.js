@@ -22,6 +22,8 @@ var map;
 var mapmarkers = [];
 var route_pts = [];
 
+$("#radius-search").val(localStorage.getItem("radius"));
+
 var menubtn = document.getElementById("menubtn");
 var menuclosebtn = document.getElementById("menuclosebtn");
 var menudata = document.getElementById("menudata");
@@ -56,6 +58,26 @@ function initMap() {
   }
 
   infowindow = new google.maps.InfoWindow();
+
+  loadmarkers();
+}
+
+function loadmarkers() {
+  const radius = document.querySelector('input[id="radius-search"]').value;
+  localStorage.setItem("radius", radius);
+  const lat = currentlat;
+  const lng = currentlng;
+  fetch("/api/properties/search", {
+    method: "post",
+    body: JSON.stringify({
+      radius,
+      lat,
+      lng,
+    }),
+    headers: { Accept: "application/json", "Content-Type": "application/json" },
+  })
+    .then((response) => response.json())
+    .then((response) => getmarkers(response));
 }
 
 function getmarkers(markers) {
@@ -126,6 +148,7 @@ function getmarkers(markers) {
       })(marker, i)
     );
   }
+  $("#menu").hide();
 }
 
 function showMarker(id) {

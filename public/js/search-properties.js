@@ -2,6 +2,7 @@ function newFormHandler(event) {
   event.preventDefault();
 
   const radius = document.querySelector('input[id="radius-search"]').value;
+  localStorage.setItem("radius", radius);
   const lat = currentlat;
   const lng = currentlng;
   fetch("/api/properties/search", {
