@@ -26,7 +26,7 @@ Review.init(
     },  
     review_text:{
         type: DataTypes.STRING,
-        allowNull:false,
+        
     },
 
     review_date:{

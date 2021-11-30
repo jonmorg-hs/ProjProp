@@ -1,18 +1,26 @@
-const seedUsers = require("./user_seeds");
-const seedPosts = require("./post_seeds");
-const seedComments = require("./comment_seeds");
-const seedProperties = require("./properties_seeds");
-const seedEventTypes = require("./eventtypes_seeds");
-
 const sequelize = require("../config/connection");
+
+const { User, Properties, Eventtypes, Events, Review } = require("../models");
+
+const seedUsers = require("./userSeeds.json");
+ const seedReviews = require("./reviews.json"); 
+const seedEvents = require("./events.json");
+ const seedProperties = require("./propertiesSeeds.json");
+const seedEventTypes = require("./eventTypes.json");
 
 const seedAll = async () => {
   await sequelize.sync({ force: true });
-  await seedUsers();
-  await seedPosts();
-  await seedComments();
-  await seedProperties();  
-  await seedEventTypes();
+
+  const users = await User.bulkCreate(seedUsers, {
+    individualHooks: true,
+    returning: true,
+  });
+
+  const properties = await Properties.bulkCreate(seedProperties);
+  const eventTypes = await Eventtypes.bulkCreate(seedEventTypes);
+  const events = await Events.bulkCreate(seedEvents);
+  const reviews = await Review.bulkCreate(seedReviews);
+
   process.exit(0);
 };
 
