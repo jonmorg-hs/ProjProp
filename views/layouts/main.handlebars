@@ -1,66 +1,88 @@
-<!DOCTYPE html>
 <html lang="en">
-<head>
-<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
-<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<link rel="shortcut icon" href="/images/favicon.png" type="image/x-icon">
-<link rel="icon" href="/images/favicon.png" type="image/x-icon">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black">
-<meta name="apple-mobile-web-app-title" content="XMAS_Lights">
-<link rel="apple-touch-icon" href="/images/icon.png">
-<title>MY FRONTYARD</title>
-<link rel="stylesheet" href="/css/style.css">
-<script src="/js/jquery.min.js"></script>
-<script src="/js/jquery-ui.min.js"></script>
-<script type="text/javascript" src="/js/jquery.ui.timepicker.js"></script>
-<script src="//code.jquery.com/jquery-1.10.2.js"></script>
-<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-<link href="/css/jquery.timepicker.css" rel="stylesheet">  
-<script src="/js/jquery.timepicker.js"></script>
-</head>
-{{#if loggedIn}}
-<div id="map"></div>
-  <img id="menubtn" src="/images/menu-icon.png" >
-  <div id="menu">
-    <img id="menuclosebtn" src="/images/close.png" >
-    <h1 style="margin-left:10px">MY FRONTYARD</h1><br/>
-    <div style='width:100%'> 
-    {{#if registered}}  
-    <a href="/dashboard/event/" class="navbar-item"><img id="event" src="/images/event.png"></a>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <link rel="shortcut icon" href="/images/favicon.png" type="image/x-icon" />
+    <link rel="icon" href="/images/favicon.png" type="image/x-icon" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="apple-mobile-web-app-title" content="XMAS_Lights" />
+    <link rel="apple-touch-icon" href="/images/icon.png" />
+    <title>MY FRONTYARD</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="/js/jquery.ui.timepicker.js"></script>
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <link href="/css/jquery.timepicker.css" rel="stylesheet" />
+    <script src="/js/jquery.timepicker.js"></script>
+  </head>
+  <body>
+    {{#if loggedIn}}
+      <div id="map"></div>
+      <div id="menu">
+        <img id="menuclosebtn" src="/images/close.png" />
+        <h1 style="margin-left:10px">MY FRONTYARD</h1><br />
+        <div style="width:100%">
+          {{#if registered}}
+            <a href="/dashboard/event/" class="navbar-item"><img
+                id="event"
+                class="menubtn"
+                src="/images/event.png"
+              /></a>
+          {{else}}
+            <a href="/dashboard/create/" class="navbar-item"><img
+                id="register"
+                class="menubtn"
+                src="/images/register.png"
+              />
+            </a>
+          {{/if}}
+          <a href="/dashboard/" class="navbar-item"><img
+              id="search"
+              class="menubtn"
+              src="/images/favorites.png"
+            />
+          </a>
+          <a href="/dashboard/search/" class="navbar-item"><img
+              id="search"
+              class="menubtn"
+              src="/images/search.png"
+            />
+          </a>
+          <img id="logout" class="menubtn" src="/images/logout.png" />
+        </div>
+        <br /><br />
+        <main class="main">
+          {{{body}}}
+        </main>
+      </div>
     {{else}}
-    <a href="/dashboard/create/" class="navbar-item"><img id="register" src="/images/register.png"> </a>
+      <div id="logindiv" style="text-align:center;font-family:arial">
+        <h2 style="margin-top:100px">MY FRONTYARD</h2>
+        <br /><br />
+        <a href="/login"><button id="login" class="button">Login</button></a>
+        <main class="main">
+          {{{body}}}
+        </main>
+      </div>
     {{/if}}
-    <a href="/dashboard/search/" class="navbar-item"><img id="search" src="/images/search.png"> </a>
-    <img id="logout" class="navbar-item" src="/images/logout.png" style="width:65px"/>
-    </div>
-    <br/><br/>
-    <main>
-    {{{ body }}}
-    </main>
-</div>
-{{else}}
-<div id="logindiv" style="text-align:center;font-family:arial">
-<h2 style='margin-top:100px'>MY FRONTYARD</h2>
-<br/><br/>
- <a href="/login"><button id="login" class="button">Login</button></a>
-<main>
-{{{ body }}}
-</main>
-</div>            
-{{/if}}
-
-{{#if loggedIn}}
-<script src="/js/logout.js"></script>
-<script src="/js/index.js"></script>
-<script src="https://maps.googleapis.com/maps/api/js?libraries=drawing,geometry,visualization&callback=initMap"
-         async defer></script>  
-{{else}}
-{{/if}}
-<script
-  src="https://code.jquery.com/jquery-3.6.0.min.js"
-  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
-  crossorigin="anonymous"></script>
-</body>
+    {{#if loggedIn}}
+      <script src="/js/logout.js"></script>
+      <script src="/js/index.js"></script>
+      <script
+        src="https://maps.googleapis.com/maps/api/js?libraries=drawing,geometry,visualization&callback=initMap"
+        async
+        defer
+      ></script>
+    {{else}}
+    {{/if}}
+    <script
+      src="https://code.jquery.com/jquery-3.6.0.min.js"
+      integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+      crossorigin="anonymous"
+    ></script>
+  </body>
 </html>

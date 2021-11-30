@@ -15,15 +15,13 @@ router.post("/", withAuth, (req, res) => {
         return;
       } else {
         const property = propertyData.map((prop) => prop.get({ plain: true }));
-        console.log(property);
-
         Events.create({
-          property_id: property.id,
-          event_id: req.body.type,
+          property_id: property[0].id,
+          event_id: req.body.event_id,
           event_start_dt: req.body.start_date,
           event_end_dt: req.body.end_date,
-          event_start_time: req.session.start_time,
-          event_end_time: req.session.end_time,
+          event_start_time: req.body.start_time,
+          event_end_time: req.body.end_time,
         })
           .then((eventData) => res.json(eventData))
           .catch((err) => {
