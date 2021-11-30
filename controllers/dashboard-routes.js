@@ -6,6 +6,7 @@ const {
   Comment,
   Properties,
   Events,
+  Eventtypes,
   savedProperties,
 } = require("../models");
 const withAuth = require("../utils/auth");
@@ -22,13 +23,19 @@ router.get("/", withAuth, (req, res) => {
           model: Properties,
           attributes: ["id", "address", "latitude", "longitude"],
           include: {
-            model: User,
-            attributes: ["username"],
+            model: Events,
+            attributes: [
+              "event_id",
+              "event_start_dt",
+              "event_end_dt",
+              "event_start_time",
+              "event_end_time",
+            ],
+            include: {
+              model: Eventtypes,
+              attributes: ["title"],
+            },
           },
-        },
-        {
-          model: User,
-          attributes: ["username"],
         },
       ],
     })

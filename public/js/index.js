@@ -20,17 +20,13 @@ var markerid;
 
 var map;
 var mapmarkers = [];
+var savedmapmarkers = [];
 var route_pts = [];
 
 $("#radius-search").val(localStorage.getItem("radius"));
 
-var menubtn = document.getElementById("menubtn");
 var menuclosebtn = document.getElementById("menuclosebtn");
 var menudata = document.getElementById("menudata");
-
-menubtn.addEventListener("click", function () {
-  document.getElementById("menu").style.display = "block";
-});
 
 menuclosebtn.addEventListener("click", function () {
   document.getElementById("menu").style.display = "none";
@@ -59,48 +55,63 @@ function initMap() {
 
   infowindow = new google.maps.InfoWindow();
 
-  loadmarkers();
+  savedmarkers();
 }
 
-function loadmarkers() {
-  const radius = document.querySelector('input[id="radius-search"]').value;
-  localStorage.setItem("radius", radius);
-  const lat = currentlat;
-  const lng = currentlng;
-  fetch("/api/properties/search", {
-    method: "post",
-    body: JSON.stringify({
-      radius,
-      lat,
-      lng,
-    }),
+function savedmarkers() {
+  fetch("/api/savedproperties/", {
+    method: "get",
     headers: { Accept: "application/json", "Content-Type": "application/json" },
   })
     .then((response) => response.json())
-    .then((response) => getmarkers(response));
+    .then((response) => getsavedmarkers(response));
+}
+
+function getsavedmarkers(markers) {
+  for (i in savedmapmarkers) {
+    savedmapmarkers[i].setMap(null);
+  }
+  var marker, i;
+  for (i = 0; i < markers.length; i++) {
+    var point = new google.maps.LatLng(markers[i]["lat"], markers[i]["lng"]);
+    marker = new google.maps.Marker({
+      position: point,
+      map: map,
+      id: markers[i]["id"],
+      title: markers[i]["address"],
+      icon: {
+        url: "/images/tree.png",
+        scaledSize: new google.maps.Size(30, 50),
+        origin: new google.maps.Point(0, 0),
+        anchor: new google.maps.Point(15, 50),
+      },
+    });
+    savedmapmarkers.push(marker);
+    google.maps.event.addListener(
+      marker,
+      "click",
+      (function (marker, i) {
+        return function () {
+          var html =
+            "<div style='text-align:centre'>" +
+            markers[i]["address"] +
+            "<br/><br/><img style='width:200px;height:200px' src='' /><br/><br/>";
+          infowindow.setContent(html);
+          infowindow.setOptions({ pixelOffset: new google.maps.Size(0, -20) });
+          infowindow.setPosition(marker.position);
+          infowindow.open(map);
+        };
+      })(marker, i)
+    );
+  }
 }
 
 function getmarkers(markers) {
   for (i in mapmarkers) {
     mapmarkers[i].setMap(null);
   }
-
   var marker, i;
   for (i = 0; i < markers.length; i++) {
-    const propertyDiv = document.createElement("div");
-    propertyDiv.classList.add("propertyCard");
-    var elem = document.createElement("img");
-    elem.setAttribute("src", "/images/house.png");
-    elem.setAttribute("margin-left", "10");
-    elem.setAttribute("margin-top", "5");
-    elem.setAttribute("height", "90");
-    elem.setAttribute("width", "90");
-    propertyDiv.appendChild(elem);
-    var label = document.createElement("label");
-    label.innerText = markers[i]["address"];
-    propertyDiv.appendChild(label);
-    //menudata.append(propertyDiv);
-
     var point = new google.maps.LatLng(markers[i]["lat"], markers[i]["lng"]);
     route_pts.push(point);
     marker = new google.maps.Marker({
@@ -121,38 +132,53 @@ function getmarkers(markers) {
       "click",
       (function (marker, i) {
         return function () {
-          //var html =
-          //  "<div style='text-align:centre'>" +
-          //  markers[i]["address"] +
-          //  "<br/><br/><button id='saveproperty' class='button' onclick=\"saveProperty(" +
-          //  markers[i]["id"] +
-          //  ")\")>Save</button><br/><br/><button id='reviewproperty' class='button' onclick=\"reviewProperty(" +
-          //  markers[i]["id"] +
-          //  ')")>Review</button><br/>';
-          //infowindow.setContent(html);
-          //infowindow.setOptions({ pixelOffset: new google.maps.Size(0, -20) });
-          //infowindow.setPosition(marker.position);
-          // infowindow.open(map);
-          $("#menu").show();
-          var markerid = markers[i]["id"];
-          const response = fetch(`/api/properties/${markerid}`, {
-            method: "GET",
-          });
-
-          if (response.ok) {
-            document.location.replace("/dashboard/");
-          } else {
-            alert(response.statusText);
-          }
+          var html =
+            "<div style='text-align:centre'>" +
+            markers[i]["address"] +
+            "<br/><br/><img style='width:200px;height:200px' src='' /><br/><br/><button id='saveproperty' class='button' onclick=\"saveProperty(" +
+            markers[i]["id"] +
+            ")\")>Save</button><br/><br/><div id='rating_" +
+            markers[i]["id"] +
+            "' class='rating'><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div>";
+          infowindow.setContent(html);
+          infowindow.setOptions({ pixelOffset: new google.maps.Size(0, -20) });
+          infowindow.setPosition(marker.position);
+          infowindow.open(map);
         };
       })(marker, i)
     );
   }
-  $("#menu").hide();
+}
+
+function saveProperty(id) {
+  fetch("/api/properties/save/", {
+    method: "post",
+    body: JSON.stringify({
+      id,
+    }),
+    headers: { "Content-Type": "application/json" },
+  })
+    .then((response) => response.json())
+    .then((response) => alert("Property saved to your favourites"));
+}
+
+function reviewProperty(id) {
+  alert(id);
 }
 
 function showMarker(id) {
-  alert(id);
+  for (i in savedmapmarkers) {
+    if (savedmapmarkers[i]["id"] == id) {
+      savedmapmarkers[i].setZIndex(99);
+      savedmapmarkers[i].setAnimation(google.maps.Animation.BOUNCE);
+      setTimeout(function () {
+        savedmapmarkers[i].setAnimation(null);
+      }, 1000);
+    } else {
+      savedmapmarkers[i].setZIndex(1);
+      savedmapmarkers[i].setAnimation(null);
+    }
+  }
 }
 
 function displayAndWatch(position) {
@@ -272,3 +298,10 @@ function getCookie(c_name) {
   }
   return "";
 }
+
+$(document).ready(function () {
+  $(".rating span").click(function () {
+    var x = $(this).index() + 1;
+    alert(x);
+  });
+});
