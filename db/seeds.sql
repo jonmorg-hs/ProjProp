@@ -1,3 +1,8 @@
+INSERT INTO Eventtypes (title)
+VALUES ("Xmas Lights"),
+       ("Halloween"),
+       ("Garage Sale");
+
 INSERT INTO User (username, password)
 VALUES ("Sal","pass1234"),
        ("Sal1","pass1235"),

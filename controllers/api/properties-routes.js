@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { Properties } = require("../../models");
+const { Properties, savedProperties } = require("../../models");
 const sequelize = require("../../config/connection");
 const withAuth = require("../../utils/auth");
 
@@ -18,10 +18,24 @@ router.post("/", withAuth, (req, res) => {
     });
 });
 
+router.post("/save/", withAuth, (req, res) => {
+  savedProperties
+    .create({
+      user_id: req.session.user_id,
+      property_id: req.body.id,
+    })
+    .then((savedData) => res.json(savedData))
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json(err);
+    });
+});
+
 router.post("/search/", withAuth, (req, res) => {
   var radius = req.body.radius;
   var lat = req.body.lat;
   var lng = req.body.lng;
+
   Properties.findAll({})
     .then((propertyData) => {
       let output = [];

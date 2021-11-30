@@ -1,33 +1,40 @@
-$('.datepicker').datepicker({dateFormat: 'd/m/yy',firstDay: 1,changeMonth: true,changeYear: true});
-$('.timepicker').timepicker({timeFormat:'H:i'});
+$(".datepicker").datepicker({
+  dateFormat: "d/m/yy",
+  firstDay: 1,
+  changeMonth: true,
+  changeYear: true,
+});
+$(".timepicker").timepicker({ timeFormat: "H:i" });
 
-async function registereventHandler(event) {
+function registereventHandler(event) {
   event.preventDefault();
-
-  const type = document.querySelector("#type-event").value;
+  const event_id = document.querySelector("#type-event").value;
   const start_date = document.querySelector("#startdate-event").value;
-  const end_date = document.querySelector("#enddate-event").value;
-  const start_time = document.querySelector("#starttime-event").value;
-  const end_time = document.querySelector("#endtime-event").value;
+  const start = document.querySelector("#starttime-event").value;
+  const start_time = parseInt(
+    new Date(start_date + " " + start).getTime() / 1000
+  ).toFixed(0);
 
-  if (type && start_date && end_date && start_time && end_time) {
-    const response = fetch("/api/events", {
+  const end_date = document.querySelector("#enddate-event").value;
+  const end = document.querySelector("#endtime-event").value;
+  const end_time = parseInt(
+    new Date(end_date + " " + end).getTime() / 1000
+  ).toFixed(0);
+
+  if (event_id && start_date && end_date && start_time && end_time) {
+    fetch("/api/events", {
       method: "post",
       body: JSON.stringify({
-        type,
+        event_id,
         start_date,
         end_date,
         start_time,
-        end_time
+        end_time,
       }),
       headers: { "Content-Type": "application/json" },
-    });
-
-    if (response.ok) {
-      alert('Event registered');
-    } else {
-      alert(response.statusText);
-    }
+    })
+      .then((response) => response.json())
+      .then((response) => alert("Event registered"));
   }
 }
 

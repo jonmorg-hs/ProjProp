@@ -60,6 +60,10 @@ Review.belongsTo(User, {
   foreignKey: "user_id",
 });
 
+Properties.hasMany(Events, {
+  foreignKey: "property_id",
+});
+
 Events.belongsTo(Properties, {
   foreignKey: "property_id",
 });
