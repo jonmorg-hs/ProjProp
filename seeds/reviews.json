@@ -1,0 +1,57 @@
+[
+    {
+        "event_id": 1,
+        "event_like": true,
+        "review_text": "Awesome!",
+        "user_id": 1
+
+    },
+    {
+        "event_id": 1,
+        "event_like": true,
+        "review_text": "Awesome!",
+        "user_id": 2
+    },
+    {
+        "event_id": 1,
+        "event_like": true,
+        "review_text": "Awesome!",
+        "user_id": 3
+    },
+    {
+        "event_id": 2,
+        "event_like": false,
+        "review_text": "Loud music",
+        "user_id": 4
+    },
+    {
+        "event_id": 2,
+        "event_like": false,
+        "review_text": "",
+        "user_id": 5
+    },
+    {
+        "event_id": 3,
+        "event_like": true,
+        "review_text": "Great!",
+        "user_id": 6
+    },
+    {
+        "event_id": 3,
+        "event_like": true,
+        "review_text": "Awesome!",
+        "user_id": 7
+    },
+    {
+        "event_id": 3,
+        "event_like": true,
+        "review_text": "Awesome!",
+        "user_id": 8
+    },
+    {
+        "event_id": 1,
+        "event_like": true,
+        "review_text": "Awesome!",
+        "user_id": 9
+    }
+]
