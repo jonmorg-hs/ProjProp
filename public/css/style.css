@@ -473,7 +473,7 @@ label {
   font-size: 0.75rem;
 }
 .input-container.password {
-  position: inherit;
+  position: relative;
 }
 .input-container.password i {
   position: absolute;
