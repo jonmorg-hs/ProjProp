@@ -94,13 +94,22 @@
         </main>
       </div>
     {{else}}
-      <div id="logindiv" style="text-align:center;font-family:arial">
-        <h2 style="margin-top:100px">MY FRONTYARD</h2>
-        <br /><br />
-        <a href="/login"><button id="login" class="button">Login</button></a>
-        <main class="main">
-          {{{body}}}
-        </main>
+      <div class="split-screen" id="loginSec">
+        <div class="left">
+          <section class="copy">
+            <h1>MY FRONTYARD</h1>
+            <p>
+              Oved ligula turpis iaculis et commodo pharetra bibendum et turpis.
+            </p>
+            <a href="/login"><button class="start-btn">BEGIN</button></a>
+          </section>
+        </div>
+        <div class="right">
+          <form class="login-form">
+            <h1 class="welcome-txt">Welcome</h1>
+            {{{body}}}
+          </form>
+        </div>
       </div>
     {{/if}}
     {{#if loggedIn}}
