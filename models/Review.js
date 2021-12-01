@@ -28,7 +28,9 @@ Review.init(
         model: "properties",
         key: "id",
       },
-    },
+    event_like:{
+        type: DataTypes.BOOLEAN,
+    },  
     event_like: {
       type: DataTypes.BOOLEAN,
     },
