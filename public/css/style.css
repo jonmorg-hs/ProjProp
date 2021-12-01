@@ -455,9 +455,6 @@ a:hover {
 .right form {
   width: 328px;
 }
-.right rightSection {
-  width: 328px;
-}
 form input[type="text"],
 form input[type="email"],
 form input[type="password"] {
