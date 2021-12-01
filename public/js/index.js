@@ -184,45 +184,7 @@ function getsavedmarkers(markers) {
   savedmapmarkers.clearLayers();
   var marker, i;
   for (i = 0; i < markers.length; i++) {
-    if (markers[i]["event"] == "") {
-      var html =
-        "<div style='font:normal 16px arial'><b>" +
-        markers[i]["address"] +
-        "</b><br/><br/>" +
-        "<img style='width:200px;height:200px' src='/images/house" +
-        markers[i]["id"] +
-        ".jpeg' /><br/><br/><img src='/images/favorites.png' style='width:30px;cursor:pointer' onclick=\"saveProperty(" +
-        markers[i]["id"] +
-        ")\" /><img src='/images/like.png?n=1' style='margin-left:20px;width:30px;cursor:pointer' onclick=\"likeProperty(" +
-        markers[i]["id"] +
-        "," +
-        markers[i]["event_id"] +
-        ")\") /><label class='like" +
-        markers[i]["id"] +
-        "' style='margin-left:5px;font:bold 30px arial'>"+markers[i]["reviews"]+"</label></div>";
-    } else {
-      var html =
-        "<div style='font:normal 16px arial'><b>" +
-        markers[i]["address"] +
-        "</b><br/><br/>" +
-        markers[i]["event"] +
-        "<br/>" +
-        markers[i]["start_date"] +
-        " " +
-        markers[i]["start_time"] +
-        "</b><br/><br/>" +
-        "<img style='width:200px;height:200px' src='/images/house" +
-        markers[i]["id"] +
-        ".jpeg' /><br/><br/><img src='/images/favorites.png' style='width:30px;cursor:pointer' onclick=\"saveProperty(" +
-        markers[i]["id"] +
-        ")\" /><img src='/images/like.png?n=1' style='margin-left:20px;width:30px;cursor:pointer' onclick=\"likeProperty(" +
-        markers[i]["id"] +
-        "," +
-        markers[i]["event_id"] +
-        ")\") /><label class='like" +
-        markers[i]["id"] +
-        "' style='margin-left:5px;font:bold 30px arial'>"+markers[i]["reviews"]+"</label></div>";
-    }
+    var html = `<div style='font:normal 16px arial'><b>${markers[i].address}</b><br/><br/>${markers[i].event}<br/>${markers[i].start_date}${markers[i].start_time}</b><br/><br/><img style='width:200px;height:200px' src='/images/house${markers[i].id}.jpeg' /><br/><br/><img src='/images/saved.png' style='width:30px;cursor:pointer' onclick=\"saveProperty(${markers[i].id})\" /><img id='likeimage_${markers[i].id}' src='/images/${markers[i].like}.png?n=1' style='margin-left:20px;width:30px;cursor:pointer' onclick=\"likeProperty(${markers[i].id},${markers[i].event_id})\") /><label id='like_${markers[i].id}' like='${markers[i].like}' style='margin-left:5px;font:bold 30px arial'>${markers[i].reviews}</label></div>`;
     if (markers[i]["event_id"] == 1) {
       mapIcon = xmasIcon;
     } else if (markers[i]["event_id"] == 2) {
@@ -238,8 +200,7 @@ function getsavedmarkers(markers) {
       event_id: markers[i]["event_id"],
     })
       .addTo(map)
-      .bindPopup(html)
-      .openPopup();
+      .bindPopup(html);
     savedmapmarkers.addLayer(marker);
   }
   console.log(savedmapmarkers);
@@ -250,45 +211,7 @@ function getmarkers(markers) {
   mapmarkers.clearLayers();
   var marker, i;
   for (i = 0; i < markers.length; i++) {
-    if (markers[i]["event"] == "") {
-      var html =
-        "<div style='font:normal 16px arial'><b>" +
-        markers[i]["address"] +
-        "</b><br/><br/>" +
-        "<img style='width:200px;height:200px' src='/images/house" +
-        markers[i]["id"] +
-        ".jpeg' /><br/><br/><img src='/images/favorites.png' style='width:30px;cursor:pointer' onclick=\"saveProperty(" +
-        markers[i]["id"] +
-        ")\" /><img src='/images/like.png?n=1' style='margin-left:20px;width:30px;cursor:pointer' onclick=\"likeProperty(" +
-        markers[i]["id"] +
-        "," +
-        markers[i]["event_id"] +
-        ")\") /><label class='like" +
-        markers[i]["id"] +
-        "'style='margin-left:5px;font:bold 30px arial'>"+markers[i]["reviews"]+"</label></div>";
-    } else {
-      var html =
-        "<div style='font:normal 16px arial'><b>" +
-        markers[i]["address"] +
-        "</b><br/><br/>" +
-        markers[i]["event"] +
-        "<br/>" +
-        markers[i]["start_date"] +
-        " " +
-        markers[i]["start_time"] +
-        "</b><br/><br/>" +
-        "<img style='width:200px;height:200px' src='/images/house" +
-        markers[i]["id"] +
-        ".jpeg' /><br/><br/><img src='/images/favorites.png' style='width:30px;cursor:pointer' onclick=\"saveProperty(" +
-        markers[i]["id"] +
-        ")\" /><img src='/images/like.png?n=1' style='margin-left:20px;width:30px;cursor:pointer' onclick=\"likeProperty(" +
-        markers[i]["id"] +
-        "," +
-        markers[i]["event_id"] +
-        ")\") /><label class='like" +
-        markers[i]["id"] +
-        "' style='margin-left:5px;font:bold 30px arial'>"+markers[i]["reviews"]+"</label></div>";
-    }
+    var html = `<div style='font:normal 16px arial'><b>${markers[i].address}</b><br/><br/>${markers[i].event}<br/>${markers[i].start_date}${markers[i].start_time}</b><br/><br/><img style='width:200px;height:200px' src='/images/house${markers[i].id}.jpeg' /><br/><br/><img src='/images/favorites.png' style='width:30px;cursor:pointer' onclick=\"saveProperty(${markers[i].id})\" /><img id='likeimage_${markers[i].id}' src='/images/${markers[i].like}.png?n=1' style='margin-left:20px;width:30px;cursor:pointer' onclick=\"likeProperty(${markers[i].id},${markers[i].event_id})\") /><label id='like_${markers[i].id}' like='${markers[i].like}' style='margin-left:5px;font:bold 30px arial'>${markers[i].reviews}</label></div>`;
     if (markers[i]["event_id"] == 1) {
       mapIcon = xmasIcon;
     } else if (markers[i]["event_id"] == 2) {
@@ -304,10 +227,10 @@ function getmarkers(markers) {
       event_id: markers[i]["event_id"],
     })
       .addTo(map)
-      .bindPopup(html)
-      .openPopup();
+      .bindPopup(html);
     mapmarkers.addLayer(marker);
   }
+  $("#menu").css({ height: "250px" });
 }
 
 function saveProperty(id) {
@@ -318,7 +241,7 @@ function saveProperty(id) {
     }
   });
   if (check == 1) {
-    alert("Property already a favourite");
+    showMessage("Property already a favorite");
   } else {
     fetch("/api/properties/save/", {
       method: "post",
@@ -328,21 +251,40 @@ function saveProperty(id) {
       headers: { "Content-Type": "application/json" },
     })
       .then((response) => response.json())
-      .then((response) => $("#message").html("Property saved to favorites"));
+      .then((response) => showMessage("Property Liked"));
   }
 }
 
+function showMessage(message) {
+  $("#message").html(message);
+  setTimeout(function () {
+    $("#message").html("");
+  }, 3000);
+}
+
 function likeProperty(property_id, event_id) {
-  fetch("/api/properties/like/", {
-    method: "post",
-    body: JSON.stringify({
-      property_id,
-      event_id,
-    }),
-    headers: { "Content-Type": "application/json" },
-  })
-    .then((response) => response.json())
-    .then((response) => $("#message").html("Property liked"));
+  if ($("#like_" + property_id).attr("like") === "liked") {
+    showMessage("You have already liked this property");
+  } else {
+    var likes = $("#like_" + property_id).text() * 1;
+    var newlikes = likes + 1;
+    $("#like_" + property_id).html(newlikes);
+    $("#like_" + property_id).attr("like", "liked");
+    $("#likeimage_" + property_id).attr("src", "/images/liked.png");
+    $("#dlike_" + property_id).html(newlikes);
+    $("#dlike_" + property_id).attr("like", "liked");
+    $("#dlikeimage_" + property_id).attr("src", "/images/liked.png");
+    fetch("/api/properties/like/", {
+      method: "post",
+      body: JSON.stringify({
+        property_id,
+        event_id,
+      }),
+      headers: { "Content-Type": "application/json" },
+    })
+      .then((response) => response.json())
+      .then((response) => showMessage("Property Liked"));
+  }
 }
 
 function removeProperty(property_id) {
@@ -370,6 +312,7 @@ function showMarker(id) {
       layer.stopBouncing();
     }
   });
+  $("#menu").css({ height: "250px" });
 }
 
 function getEventLikes(property_id) {
