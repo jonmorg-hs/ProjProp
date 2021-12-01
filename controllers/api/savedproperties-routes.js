@@ -1,41 +1,63 @@
 const router = require("express").Router();
-const { savedProperties, Properties } = require("../../models");
+const {
+  savedProperties,
+  Properties,
+  Events,
+  Eventtypes,
+} = require("../../models");
 const withAuth = require("../../utils/auth");
+const sequelize = require("../../config/connection");
 
-const mysql = require("mysql2");
-
-const db = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "",
-  database: "property_db",
-});
-
-router.get("/", withAuth, async (req, res) => {
-  await db.query(
-    `SELECT * FROM savedProperties LEFT JOIN Properties ON savedProperties.property_id = Properties.id LEFT JOIN Events ON savedProperties.property_id = Events.property_id LEFT JOIN Eventtypes ON Events.event_id = Eventtypes.id WHERE savedProperties.user_id = ? `,
-    req.session.user_id,
-    async (error, results) => {
-      if (error) {
-        throw error;
-      } else {
-        let output = [];
-        for (var i = 0; i < results.length; i++) {
-          var marker = {};
-          marker.id = results[i]["id"];
-          marker.address = results[i]["address"];
-          marker.lat = results[i]["latitude"];
-          marker.lng = results[i]["longitude"];
-          marker.lng = results[i]["longitude"];
-          marker.event = results[i]["title"];
-          marker.start_date = results[i]["event_start_dt"];
-          marker.end_date = results[i]["event_end_dt"];
-          output.push(marker);
-        }
-        res.json(output);
+router.get("/", withAuth, (req, res) => {
+  savedProperties
+    .findAll({
+      where: {
+        user_id: req.session.user_id,
+      },
+      attributes: ["id", "user_id", "property_id"],
+      include: [
+        {
+          model: Properties,
+          attributes: ["id", "address", "latitude", "longitude"],
+          include: {
+            model: Events,
+            attributes: [
+              "event_id",
+              "event_start_dt",
+              "event_end_dt",
+              "event_start_time",
+              "event_end_time",
+            ],
+            include: {
+              model: Eventtypes,
+              attributes: ["title"],
+            },
+          },
+        },
+      ],
+    })
+    .then((dbPostData) => {
+      const results = dbPostData.map((post) => post.get({ plain: true }));
+      console.log(results);
+      let output = [];
+      for (var i = 0; i < results.length; i++) {
+        var marker = {};
+        marker.id = results[i]["id"];
+        marker.address = results[i]["property"]["address"];
+        marker.lat = results[i]["property"]["latitude"];
+        marker.lng = results[i]["property"]["longitude"];
+        marker.event_id = results[i]["events"]["event_id"];
+        marker.event = results[i]["events"]["eventtype"]["title"];
+        marker.start_date = results[i]["events"]["event_start_dt"];
+        marker.end_date = results[i]["events"]["event_end_dt"];
+        output.push(marker);
       }
-    }
-  );
+      res.json(output);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json(err);
+    });
 });
 
 module.exports = router;
