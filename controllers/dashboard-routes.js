@@ -1,5 +1,4 @@
 const router = require("express").Router();
-const sequelize = require("../config/connection");
 const {
   Post,
   User,
@@ -9,6 +8,7 @@ const {
   Eventtypes,
   savedProperties,
 } = require("../models");
+const sequelize = require("../config/connection");
 const withAuth = require("../utils/auth");
 
 router.get("/", withAuth, (req, res) => {
@@ -39,9 +39,8 @@ router.get("/", withAuth, (req, res) => {
         },
       ],
     })
-    .then((dbPostData) => {
-      const posts = dbPostData.map((post) => post.get({ plain: true }));
-      console.log(JSON.stringify(posts));
+    .then((results) => {
+      const posts = results.map((post) => post.get({ plain: true }));
       res.render("dashboard", {
         posts,
         loggedIn: true,
@@ -219,7 +218,7 @@ router.get("/event/", withAuth, (req, res) => {
     });
 });
 
-router.get("/delete/:id", withAuth, (req, res) => {
+router.delete("/:id", withAuth, (req, res) => {
   savedProperties
     .destroy({
       where: {
@@ -227,71 +226,18 @@ router.get("/delete/:id", withAuth, (req, res) => {
         user_id: req.session.user_id,
       },
     })
-    .then((savePropertiesData) => {
-      if (!savePropertiesData) {
-        res
-          .status(404)
-          .json({ message: "No saved property found with this id" });
-        return;
-      } else {
-        savedProperties
-          .findAll({
-            where: {
-              user_id: req.session.user_id,
-            },
-            attributes: ["id", "user_id", "property_id"],
-            include: [
-              {
-                model: Properties,
-                attributes: ["id", "address", "latitude", "longitude"],
-                include: {
-                  model: User,
-                  attributes: ["username"],
-                },
-              },
-              {
-                model: User,
-                attributes: ["username"],
-              },
-            ],
-          })
-          .then((dbPostData) => {
-            const posts = dbPostData.map((post) => post.get({ plain: true }));
-            res.render("dashboard", {
-              posts,
-              loggedIn: true,
-              registered: req.session.registered,
-            });
-          });
-      }
+    .then((deleteData) => {
+      const posts = deleteData.map((post) => post.get({ plain: true }));
+      res.render("dashboard", {
+        posts,
+        loggedIn: true,
+        registered: req.session.registered,
+      });
     })
     .catch((err) => {
       console.log(err);
       res.status(500).json(err);
     });
-});
-
-router.get("/review/:id", withAuth, (req, res) => {
-  //  savedProperties
-  //    .destroy({
-  //      where: {
-  //        property_id: req.params.id,
-  //        user_id: req.session.user_id,
-  //      },
-  //    })
-  //    .then((savePropertiesData) => {
-  //      if (!savePropertiesData) {
-  //        res
-  //          .status(404)
-  //          .json({ message: "No saved property found with this id" });
-  //        return;
-  //      }
-  //      res.json(savePropertiesData);
-  //    })
-  //    .catch((err) => {
-  //      console.log(err);
-  //      res.status(500).json(err);
-  //    });
 });
 
 module.exports = router;

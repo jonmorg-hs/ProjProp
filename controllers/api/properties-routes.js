@@ -1,5 +1,11 @@
 const router = require("express").Router();
-const { Properties, savedProperties } = require("../../models");
+const {
+  Properties,
+  savedProperties,
+  Events,
+  Eventtypes,
+  Review,
+} = require("../../models");
 const sequelize = require("../../config/connection");
 const withAuth = require("../../utils/auth");
 
@@ -31,13 +37,47 @@ router.post("/save/", withAuth, (req, res) => {
     });
 });
 
+router.post("/like/", withAuth, (req, res) => {
+  console.log(req.body);
+  Review.create({
+    user_id: req.session.user_id,
+    event_id: req.body.event_id,
+    property_id: req.body.property_id,
+    event_like: true,
+  })
+    .then((savedData) => res.json(savedData))
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json(err);
+    });
+});
+
 router.post("/search/", withAuth, (req, res) => {
   var radius = req.body.radius;
   var lat = req.body.lat;
   var lng = req.body.lng;
 
-  Properties.findAll({})
+  Properties.findAll({
+    attributes: ["id", "address", "latitude", "longitude"],
+    include: [
+      {
+        model: Events,
+        attributes: [
+          "event_id",
+          "event_start_dt",
+          "event_end_dt",
+          "event_start_time",
+          "event_end_time",
+        ],
+        include: {
+          model: Eventtypes,
+          attributes: ["title"],
+        },
+      },
+    ],
+  })
     .then((propertyData) => {
+      console.log(JSON.stringify(propertyData));
       let output = [];
       for (var i = 0; i < propertyData.length; i++) {
         var R = 6371; // Radius of the earth in km
@@ -57,10 +97,91 @@ router.post("/search/", withAuth, (req, res) => {
           marker.address = propertyData[i]["address"];
           marker.lat = propertyData[i]["latitude"];
           marker.lng = propertyData[i]["longitude"];
+          if (propertyData[i]["event"] == null) {
+            marker.event_id = "";
+            marker.event = "";
+            marker.start_date = "";
+            marker.end_date = "";
+            marker.start_time = "";
+            marker.end_time = "";
+          } else {
+            marker.event_id = propertyData[i]["event"]["event_id"];
+            marker.event = propertyData[i]["event"]["eventtype"]["title"];
+            marker.start_date = propertyData[i]["event_start_dt"];
+            marker.end_date = propertyData[i]["event_end_dt"];
+            marker.start_time = propertyData[i]["event_start_time"];
+            marker.end_time = propertyData[i]["event_end_time"];
+          }
           output.push(marker);
         }
       }
-      console.log(output);
+      res.json(output);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json(err);
+    });
+});
+
+router.get("/saved/", withAuth, (req, res) => {
+  savedProperties
+    .findAll({
+      where: {
+        user_id: req.session.user_id,
+      },
+      attributes: ["id", "user_id", "property_id"],
+      include: [
+        {
+          model: Properties,
+          attributes: ["id", "address", "latitude", "longitude"],
+          include: {
+            model: Events,
+            attributes: [
+              "event_id",
+              "event_start_dt",
+              "event_end_dt",
+              "event_start_time",
+              "event_end_time",
+            ],
+            include: {
+              model: Eventtypes,
+              attributes: ["title"],
+            },
+          },
+        },
+      ],
+    })
+    .then((propertyData) => {
+      console.log(JSON.stringify(propertyData));
+      let output = [];
+      for (var i = 0; i < propertyData.length; i++) {
+        var marker = {};
+        marker.id = propertyData[i]["property"]["id"];
+        marker.address = propertyData[i]["property"]["address"];
+        marker.lat = propertyData[i]["property"]["latitude"];
+        marker.lng = propertyData[i]["property"]["longitude"];
+        if (propertyData[i]["property"]["event"] == null) {
+          marker.event_id = "";
+          marker.event = "";
+          marker.start_date = "";
+          marker.end_date = "";
+          marker.start_time = "";
+          marker.end_time = "";
+        } else {
+          marker.event_id = propertyData[i]["property"]["event"]["event_id"];
+          marker.event =
+            propertyData[i]["property"]["event"]["eventtype"]["title"];
+          marker.start_date =
+            propertyData[i]["property"]["event"]["event_start_dt"];
+          marker.end_date =
+            propertyData[i]["property"]["event"]["event_end_dt"];
+          marker.start_time =
+            propertyData[i]["property"]["event"]["event_start_time"];
+          marker.end_time =
+            propertyData[i]["property"]["event"]["event_end_time"];
+        }
+        output.push(marker);
+      }
       res.json(output);
     })
     .catch((err) => {

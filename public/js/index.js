@@ -11,16 +11,56 @@ var z,
   min_accuracy = 150,
   date_pos_updated = "",
   info_string = "";
-var currentposmarker = [];
+
 var currentpos;
 var currentPositionMarker;
-var infowindow;
+
 let currentlat, currentlng;
 var markerid;
 
-var map;
-var mapmarkers = [];
-var savedmapmarkers = [];
+var markerscales = [
+  1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 14, 18, 22, 25, 28, 32, 35, 38, 40, 42, 44, 46,
+  48, 50,
+];
+
+var currentposmarker = new L.LayerGroup();
+var mapmarkers = new L.LayerGroup();
+var savedmapmarkers = new L.LayerGroup();
+
+var myposIcon = L.icon({
+  iconUrl: "/images/pos.png",
+  iconSize: [10, 10],
+  iconAnchor: [5, 5],
+  popupAnchor: [0, -15],
+});
+
+var xmasIcon = L.icon({
+  id: "",
+  event_id: "",
+  iconUrl: "/images/xmas_tree.png",
+  iconSize: [50, 50],
+  iconAnchor: [25, 50],
+  popupAnchor: [0, -55],
+});
+
+var halloweenIcon = L.icon({
+  id: "",
+  event_id: "",
+  iconUrl: "/images/halloween.png",
+  iconSize: [50, 50],
+  iconAnchor: [25, 50],
+  popupAnchor: [0, -55],
+});
+
+var garagesaleIcon = L.icon({
+  id: "",
+  event_id: "",
+  iconUrl: "/images/garagesale.png",
+  iconSize: [50, 50],
+  iconAnchor: [25, 50],
+  popupAnchor: [0, -55],
+});
+
 var route_pts = [];
 
 $("#radius-search").val(localStorage.getItem("radius"));
@@ -32,34 +72,106 @@ menuclosebtn.addEventListener("click", function () {
   document.getElementById("menu").style.display = "none";
 });
 
-function initMap() {
-  map = new google.maps.Map(document.getElementById("map"), {
-    center: new google.maps.LatLng(-37.77669, 145.05574),
-    zoom: 15,
-    panControl: false,
-    scaleControl: true,
-    streetViewControl: false,
-    fullscreenControl: false,
-    mapTypeControl: false,
-  });
+var map = L.map("map", { minZoom: 3, maxZoom: 22 }).setView(
+  [-37.77669, 145.05574],
+  18
+);
 
-  if (!!navigator.geolocation) {
-    wpid = navigator.geolocation.getCurrentPosition(displayAndWatch, locError, {
-      maximumAge: 0,
-      timeout: 1000,
-      enableHighAccuracy: true,
-    });
-  } else {
-    alert("Your browser does not support the Geolocation API");
+map.locate({ setView: true, maxZoom: 16 });
+
+map.zoomControl.setPosition("bottomright");
+var baselayer = L.tileLayer(
+  "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+  {
+    maxZoom: 22,
+    attribution:
+      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
   }
+).addTo(map);
 
-  infowindow = new google.maps.InfoWindow();
+map.on("zoomend", function () {
+  var currentZoom = map.getZoom();
+  var newSize = markerscales[currentZoom];
+  var newoffset = -1 * newSize - 5;
+  var newmidoffset = newSize / 2;
+  savedmapmarkers.eachLayer(function (layer) {
+    if (layer.options.event_id == 1) {
+      xmasIcon = new L.Icon({
+        id: layer.options.event_id,
+        event_id: 1,
+        iconUrl: "/images/xmas_tree.png",
+        iconSize: [newSize, newSize],
+        iconAnchor: [newmidoffset, newSize],
+        popupAnchor: [0, newoffset],
+      });
+      layer.setIcon(xmasIcon);
+    }
+    if (layer.options.event_id == 2) {
+      halloweenIcon = new L.Icon({
+        id: layer.options.event_id,
+        event_id: 2,
+        iconUrl: "/images/halloween.png",
+        iconSize: [newSize, newSize],
+        iconAnchor: [newmidoffset, newSize],
+        popupAnchor: [0, newoffset],
+      });
+      layer.setIcon(halloweenIcon);
+    }
+    if (layer.options.event_id == 3) {
+      garagesaleIcon = new L.Icon({
+        id: layer.options.event_id,
+        event_id: 3,
+        iconUrl: "/images/garagesale.png",
+        iconSize: [newSize, newSize],
+        iconAnchor: [newmidoffset, newSize],
+        popupAnchor: [0, newoffset],
+      });
+      layer.setIcon(garagesaleIcon);
+    }
+  });
+  mapmarkers.eachLayer(function (layer) {
+    if (layer.options.event_id == 1) {
+      xmasIcon = new L.Icon({
+        id: layer.options.event_id,
+        event_id: 1,
+        iconUrl: "/images/xmas_tree.png",
+        iconSize: [newSize, newSize],
+        iconAnchor: [newmidoffset, newSize],
+        popupAnchor: [0, newoffset],
+      });
+      layer.setIcon(xmasIcon);
+    }
+    if (layer.options.event_id == 2) {
+      halloweenIcon = new L.Icon({
+        id: layer.options.event_id,
+        event_id: 2,
+        iconUrl: "/images/halloween.png",
+        iconSize: [newSize, newSize],
+        iconAnchor: [newmidoffset, newSize],
+        popupAnchor: [0, newoffset],
+      });
+      layer.setIcon(halloweenIcon);
+    }
+    if (layer.options.event_id == 3) {
+      garagesaleIcon = new L.Icon({
+        id: layer.options.event_id,
+        event_id: 3,
+        iconUrl: "/images/garagesale.png",
+        iconSize: [newSize, newSize],
+        iconAnchor: [newmidoffset, newSize],
+        popupAnchor: [0, newoffset],
+      });
+      layer.setIcon(garagesaleIcon);
+    }
+  });
+});
 
-  savedmarkers();
-}
+currentposmarker.addTo(map);
+mapmarkers.addTo(map);
+savedmapmarkers.addTo(map);
 
 function savedmarkers() {
-  fetch("/api/savedproperties/", {
+  fetch("/api/properties/saved/", {
     method: "get",
     headers: { Accept: "application/json", "Content-Type": "application/json" },
   })
@@ -68,122 +180,212 @@ function savedmarkers() {
 }
 
 function getsavedmarkers(markers) {
-  for (i in savedmapmarkers) {
-    savedmapmarkers[i].setMap(null);
-  }
+  console.log(JSON.stringify(markers));
+  savedmapmarkers.clearLayers();
   var marker, i;
   for (i = 0; i < markers.length; i++) {
-    var point = new google.maps.LatLng(markers[i]["lat"], markers[i]["lng"]);
-    marker = new google.maps.Marker({
-      position: point,
-      map: map,
+    if (markers[i]["event"] == "") {
+      var html =
+        "<div style='font:normal 16px arial'><b>" +
+        markers[i]["address"] +
+        "</b><br/><br/>" +
+        "<img style='width:200px;height:200px' src='/images/house" +
+        markers[i]["id"] +
+        ".jpeg' /><br/><br/><img src='/images/favorites.png' style='width:30px;cursor:pointer' onclick=\"saveProperty(" +
+        markers[i]["id"] +
+        ")\" /><img src='/images/like.png?n=1' style='margin-left:20px;width:30px;cursor:pointer' onclick=\"likeProperty(" +
+        markers[i]["id"] +
+        "," +
+        markers[i]["event_id"] +
+        ")\") /><label class='like" +
+        markers[i]["id"] +
+        "' style='margin-left:5px;font:bold 30px arial'>20</label></div>";
+    } else {
+      var html =
+        "<div style='font:normal 16px arial'><b>" +
+        markers[i]["address"] +
+        "</b><br/><br/>" +
+        markers[i]["event"] +
+        "<br/>" +
+        markers[i]["start_date"] +
+        " " +
+        markers[i]["start_time"] +
+        "</b><br/><br/>" +
+        "<img style='width:200px;height:200px' src='/images/house" +
+        markers[i]["id"] +
+        ".jpeg' /><br/><br/><img src='/images/favorites.png' style='width:30px;cursor:pointer' onclick=\"saveProperty(" +
+        markers[i]["id"] +
+        ")\" /><img src='/images/like.png?n=1' style='margin-left:20px;width:30px;cursor:pointer' onclick=\"likeProperty(" +
+        markers[i]["id"] +
+        "," +
+        markers[i]["event_id"] +
+        ")\") /><label class='like" +
+        markers[i]["id"] +
+        "' style='margin-left:5px;font:bold 30px arial'>20</label></div>";
+    }
+    if (markers[i]["event_id"] == 1) {
+      mapIcon = xmasIcon;
+    } else if (markers[i]["event_id"] == 2) {
+      mapIcon = halloweenIcon;
+    } else if (markers[i]["event_id"] == 3) {
+      mapIcon = garagesaleIcon;
+    } else {
+      mapIcon = xmasIcon;
+    }
+    marker = L.marker([markers[i]["lat"], markers[i]["lng"]], {
+      icon: mapIcon,
       id: markers[i]["id"],
-      title: markers[i]["address"],
-      icon: {
-        url: "/images/tree.png",
-        scaledSize: new google.maps.Size(30, 50),
-        origin: new google.maps.Point(0, 0),
-        anchor: new google.maps.Point(15, 50),
-      },
-    });
-    savedmapmarkers.push(marker);
-    google.maps.event.addListener(
-      marker,
-      "click",
-      (function (marker, i) {
-        return function () {
-          var html =
-            "<div style='text-align:centre'>" +
-            markers[i]["address"] +
-            "<br/><br/><img style='width:200px;height:200px' src='' /><br/><br/>";
-          infowindow.setContent(html);
-          infowindow.setOptions({ pixelOffset: new google.maps.Size(0, -20) });
-          infowindow.setPosition(marker.position);
-          infowindow.open(map);
-        };
-      })(marker, i)
-    );
+      event_id: markers[i]["event_id"],
+    })
+      .addTo(map)
+      .bindPopup(html)
+      .openPopup();
+    savedmapmarkers.addLayer(marker);
   }
+  console.log(savedmapmarkers);
 }
 
 function getmarkers(markers) {
-  for (i in mapmarkers) {
-    mapmarkers[i].setMap(null);
-  }
+  console.log(JSON.stringify(markers));
+  mapmarkers.clearLayers();
   var marker, i;
   for (i = 0; i < markers.length; i++) {
-    var point = new google.maps.LatLng(markers[i]["lat"], markers[i]["lng"]);
-    route_pts.push(point);
-    marker = new google.maps.Marker({
-      position: point,
-      map: map,
+    if (markers[i]["event"] == "") {
+      var html =
+        "<div style='font:normal 16px arial'><b>" +
+        markers[i]["address"] +
+        "</b><br/><br/>" +
+        "<img style='width:200px;height:200px' src='/images/house" +
+        markers[i]["id"] +
+        ".jpeg' /><br/><br/><img src='/images/favorites.png' style='width:30px;cursor:pointer' onclick=\"saveProperty(" +
+        markers[i]["id"] +
+        ")\" /><img src='/images/like.png?n=1' style='margin-left:20px;width:30px;cursor:pointer' onclick=\"likeProperty(" +
+        markers[i]["id"] +
+        "," +
+        markers[i]["event_id"] +
+        ")\") /><label class='like" +
+        markers[i]["id"] +
+        "'style='margin-left:5px;font:bold 30px arial'>20</label></div>";
+    } else {
+      var html =
+        "<div style='font:normal 16px arial'><b>" +
+        markers[i]["address"] +
+        "</b><br/><br/>" +
+        markers[i]["event"] +
+        "<br/>" +
+        markers[i]["start_date"] +
+        " " +
+        markers[i]["start_time"] +
+        "</b><br/><br/>" +
+        "<img style='width:200px;height:200px' src='/images/house" +
+        markers[i]["id"] +
+        ".jpeg' /><br/><br/><img src='/images/favorites.png' style='width:30px;cursor:pointer' onclick=\"saveProperty(" +
+        markers[i]["id"] +
+        ")\" /><img src='/images/like.png?n=1' style='margin-left:20px;width:30px;cursor:pointer' onclick=\"likeProperty(" +
+        markers[i]["id"] +
+        "," +
+        markers[i]["event_id"] +
+        ")\") /><label class='like" +
+        markers[i]["id"] +
+        "' style='margin-left:5px;font:bold 30px arial'>20</label></div>";
+    }
+    if (markers[i]["event_id"] == 1) {
+      mapIcon = xmasIcon;
+    } else if (markers[i]["event_id"] == 2) {
+      mapIcon = halloweenIcon;
+    } else if (markers[i]["event_id"] == 3) {
+      mapIcon = garagesaleIcon;
+    } else {
+      mapIcon = xmasIcon;
+    }
+    marker = L.marker([markers[i]["lat"], markers[i]["lng"]], {
+      icon: mapIcon,
       id: markers[i]["id"],
-      title: markers[i]["address"],
-      icon: {
-        url: "/images/tree.png",
-        scaledSize: new google.maps.Size(30, 50),
-        origin: new google.maps.Point(0, 0),
-        anchor: new google.maps.Point(15, 50),
-      },
-    });
-    mapmarkers.push(marker);
-    google.maps.event.addListener(
-      marker,
-      "click",
-      (function (marker, i) {
-        return function () {
-          var html =
-            "<div style='text-align:centre'>" +
-            markers[i]["address"] +
-            "<br/><br/><img style='width:200px;height:200px' src='' /><br/><br/><button id='saveproperty' class='button' onclick=\"saveProperty(" +
-            markers[i]["id"] +
-            ")\")>Save</button><br/><br/><div id='rating_" +
-            markers[i]["id"] +
-            "' class='rating'><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div>";
-          infowindow.setContent(html);
-          infowindow.setOptions({ pixelOffset: new google.maps.Size(0, -20) });
-          infowindow.setPosition(marker.position);
-          infowindow.open(map);
-        };
-      })(marker, i)
-    );
+      event_id: markers[i]["event_id"],
+    })
+      .addTo(map)
+      .bindPopup(html)
+      .openPopup();
+    mapmarkers.addLayer(marker);
   }
 }
 
 function saveProperty(id) {
-  fetch("/api/properties/save/", {
+  var check = 0;
+  savedmapmarkers.eachLayer(function (layer) {
+    if (layer.options.id == id) {
+      check = 1;
+    }
+  });
+  if (check == 1) {
+    alert("Property already a favourite");
+  } else {
+    fetch("/api/properties/save/", {
+      method: "post",
+      body: JSON.stringify({
+        id,
+      }),
+      headers: { "Content-Type": "application/json" },
+    })
+      .then((response) => response.json())
+      .then((response) => $("#message").html("Property saved to favorites"));
+  }
+}
+
+function likeProperty(property_id, event_id) {
+  fetch("/api/properties/like/", {
     method: "post",
     body: JSON.stringify({
-      id,
+      property_id,
+      event_id,
     }),
     headers: { "Content-Type": "application/json" },
   })
     .then((response) => response.json())
-    .then((response) => alert("Property saved to your favourites"));
+    .then((response) => $("#message").html("Property liked"));
 }
 
-function reviewProperty(id) {
-  alert(id);
+function removeProperty(property_id) {
+  var check = confirm(
+    "Do you wish to remove this property from your favorites"
+  );
+
+  if (check) {
+    fetch(`/dashboard/${property_id}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+    })
+      .then((response) => response.json())
+      .then((response) => window.location.reload());
+  }
 }
 
 function showMarker(id) {
-  for (i in savedmapmarkers) {
-    if (savedmapmarkers[i]["id"] == id) {
-      savedmapmarkers[i].setZIndex(99);
-      savedmapmarkers[i].setAnimation(google.maps.Animation.BOUNCE);
-      setTimeout(function () {
-        savedmapmarkers[i].setAnimation(null);
-      }, 1000);
+  savedmapmarkers.eachLayer(function (layer) {
+    if (layer.options.id == id) {
+      layer.bounce();
+      layer.openPopup();
+      map.setView(layer.getLatLng(), 18);
     } else {
-      savedmapmarkers[i].setZIndex(1);
-      savedmapmarkers[i].setAnimation(null);
+      layer.stopBouncing();
     }
-  }
+  });
+}
+
+function getEventLikes(property_id) {
+  fetch("/api/events/likes/", {
+    method: "post",
+    body: JSON.stringify({
+      property_id,
+    }),
+    headers: { "Content-Type": "application/json" },
+  })
+    .then((response) => response.json())
+    .then((response) => window.location.reload());
 }
 
 function displayAndWatch(position) {
   setCurrentPosition(position);
-  watchCurrentPosition();
 }
 
 function locError(error) {
@@ -221,36 +423,18 @@ function locError(error) {
 function setCurrentPosition(pos) {
   currentlat = pos.coords.latitude;
   currentlng = pos.coords.longitude;
+  currentposmarker.clearLayers();
 
-  for (i in currentposmarker) {
-    currentposmarker[i].setMap(null);
-  }
-  currentposmarker.length = 0;
-  currentPositionMarker = new google.maps.Marker({
-    icon: new google.maps.MarkerImage(
-      "//maps.gstatic.com/mapfiles/mobile/mobileimgs2.png",
-      new google.maps.Size(22, 22),
-      new google.maps.Point(0, 18),
-      new google.maps.Point(11, 11)
-    ),
-    position: new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude),
-    title: "Current Position",
-    map: map,
-    zIndex: 6,
-  });
-  currentposmarker.push(currentPositionMarker);
-}
-
-function watchCurrentPosition(position) {
-  var positionTimer = navigator.geolocation.watchPosition(function (position) {
-    setMarkerPosition(currentPositionMarker, position);
-  });
-}
-
-function setMarkerPosition(marker, position) {
-  marker.setPosition(
-    new google.maps.LatLng(position.coords.latitude, position.coords.longitude)
-  );
+  currentPositionMarker = L.marker(
+    [pos.coords.latitude, pos.coords.longitude],
+    {
+      icon: myposIcon,
+    }
+  )
+    .addTo(map)
+    .bindPopup("current position")
+    .openPopup();
+  currentposmarker.addLayer(currentPositionMarker);
 }
 
 function saveMapState() {
@@ -300,8 +484,14 @@ function getCookie(c_name) {
 }
 
 $(document).ready(function () {
-  $(".rating span").click(function () {
-    var x = $(this).index() + 1;
-    alert(x);
-  });
+  if (!!navigator.geolocation) {
+    wpid = navigator.geolocation.getCurrentPosition(displayAndWatch, locError, {
+      maximumAge: 0,
+      timeout: 1000,
+      enableHighAccuracy: true,
+    });
+  } else {
+    alert("Your browser does not support the Geolocation API");
+  }
+  savedmarkers();
 });

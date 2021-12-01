@@ -17,6 +17,7 @@ body {
   height: 100%;
   top: 0px;
   left: 0px;
+  z-index: 0;
 }
 #logindiv {
   width: 100%;
@@ -229,7 +230,6 @@ main {
 
 footer {
   border-top: 1px solid #ccc;
-  display: flex;
   justify-content: center;
   padding: 1%;
   font-size: 110%;
