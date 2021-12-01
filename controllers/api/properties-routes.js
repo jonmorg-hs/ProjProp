@@ -134,20 +134,27 @@ router.get("/saved/", withAuth, (req, res) => {
         {
           model: Properties,
           attributes: ["id", "address", "latitude", "longitude"],
-          include: {
-            model: Events,
-            attributes: [
-              "event_id",
-              "event_start_dt",
-              "event_end_dt",
-              "event_start_time",
-              "event_end_time",
-            ],
-            include: {
-              model: Eventtypes,
-              attributes: ["title"],
+          include: [
+            {
+              model: Events,
+              attributes: [
+                "event_id",
+                "event_start_dt",
+                "event_end_dt",
+                "event_start_time",
+                "event_end_time",
+              ],
+
+              include: {
+                model: Eventtypes,
+                attributes: ["title"],
+              },
             },
-          },
+            {
+              model: Review,
+              attributes: ["property_id", "event_like"],
+            },
+          ],
         },
       ],
     })
@@ -180,6 +187,12 @@ router.get("/saved/", withAuth, (req, res) => {
           marker.end_time =
             propertyData[i]["property"]["event"]["event_end_time"];
         }
+        if(propertyData[i]["property"]["reviews"].length > 0){
+          marker.reviews = propertyData[i]["property"]["reviews"].length;
+        }
+        else{
+          marker.reviews = 0;
+        }
         output.push(marker);
       }
       res.json(output);
@@ -190,18 +203,6 @@ router.get("/saved/", withAuth, (req, res) => {
     });
 });
 
-router.get("/:id", withAuth, (req, res) => {
-  Properties.findAll({
-    where: {
-      id: req.params.id,
-    },
-  })
-    .then((propertyData) => res.json(propertyData))
-    .catch((err) => {
-      console.log(err);
-      res.status(500).json(err);
-    });
-});
 
 function deg2rad(deg) {
   return deg * (Math.PI / 180);

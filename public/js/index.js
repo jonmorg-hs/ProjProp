@@ -199,7 +199,7 @@ function getsavedmarkers(markers) {
         markers[i]["event_id"] +
         ")\") /><label class='like" +
         markers[i]["id"] +
-        "' style='margin-left:5px;font:bold 30px arial'>20</label></div>";
+        "' style='margin-left:5px;font:bold 30px arial'>"+markers[i]["reviews"]+"</label></div>";
     } else {
       var html =
         "<div style='font:normal 16px arial'><b>" +
@@ -221,7 +221,7 @@ function getsavedmarkers(markers) {
         markers[i]["event_id"] +
         ")\") /><label class='like" +
         markers[i]["id"] +
-        "' style='margin-left:5px;font:bold 30px arial'>20</label></div>";
+        "' style='margin-left:5px;font:bold 30px arial'>"+markers[i]["reviews"]+"</label></div>";
     }
     if (markers[i]["event_id"] == 1) {
       mapIcon = xmasIcon;
@@ -265,7 +265,7 @@ function getmarkers(markers) {
         markers[i]["event_id"] +
         ")\") /><label class='like" +
         markers[i]["id"] +
-        "'style='margin-left:5px;font:bold 30px arial'>20</label></div>";
+        "'style='margin-left:5px;font:bold 30px arial'>"+markers[i]["reviews"]+"</label></div>";
     } else {
       var html =
         "<div style='font:normal 16px arial'><b>" +
@@ -287,7 +287,7 @@ function getmarkers(markers) {
         markers[i]["event_id"] +
         ")\") /><label class='like" +
         markers[i]["id"] +
-        "' style='margin-left:5px;font:bold 30px arial'>20</label></div>";
+        "' style='margin-left:5px;font:bold 30px arial'>"+markers[i]["reviews"]+"</label></div>";
     }
     if (markers[i]["event_id"] == 1) {
       mapIcon = xmasIcon;

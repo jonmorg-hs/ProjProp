@@ -2,11 +2,11 @@
          
         <label class="heading" style="margin-top:20px;margin-bottom:15px">My Favorite Properties</label>
         <hr>
-{{#if posts.length}}
+{{#if savedProperties.length}}
     </div>
 
-    {{#each posts as |post|}}
-        {{> post-info post}}
+    {{#each savedProperties as |property|}}
+        {{> favourites property}}
         </div>
     {{/each}}
 
