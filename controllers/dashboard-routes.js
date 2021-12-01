@@ -21,31 +21,46 @@ router.get("/", withAuth, (req, res) => {
         {
           model: Properties,
           attributes: ["id", "address", "latitude", "longitude"],
-          include:[ {
-            model: Events,
-            attributes: [
-              "event_id",
-              "event_start_dt",
-              "event_end_dt",
-              "event_start_time",
-              "event_end_time",
-            ],
-            include: {
-              model: Eventtypes,
-              attributes: ["title"],
+          include: [
+            {
+              model: Events,
+              attributes: [
+                "event_id",
+                "event_start_dt",
+                "event_end_dt",
+                "event_start_time",
+                "event_end_time",
+              ],
+              include: {
+                model: Eventtypes,
+                attributes: ["title"],
+              },
             },
-          },
-          {
-            model: Review,
-            attributes: ["property_id", "event_like"],
-          },
-        ]
+            {
+              model: Review,
+              attributes: ["user_id", "property_id", "event_like"],
+            },
+          ],
         },
       ],
     })
     .then((results) => {
-      const savedProperties = results.map((property) => property.get({ plain: true }));
-      console.log(savedProperties);
+      const savedProperties = results.map((property) =>
+        property.get({ plain: true })
+      );
+      for (var i = 0; i < savedProperties.length; i++) {
+        var reviewdata = savedProperties[i]["property"]["reviews"];
+        var reviews = reviewdata.length;
+        savedProperties[i]["property"]["reviews"] = reviews;
+        var like = "like";
+        console.log(JSON.stringify(reviewdata));
+        for (var j = 0; j < reviewdata.length; j++) {
+          if (reviewdata[j]["user_id"] === req.session.user_id) {
+            like = "liked";
+          }
+        }
+        savedProperties[i]["property"]["like"] = like;
+      }
       res.render("dashboard", {
         savedProperties,
         loggedIn: true,
@@ -89,7 +104,9 @@ router.get("/create/", withAuth, (req, res) => {
 router.get("/search/", withAuth, (req, res) => {
   Properties.findAll({})
     .then((propertiesData) => {
-      const properties = propertiesData.map((property) => property.get({ plain: true }));
+      const properties = propertiesData.map((property) =>
+        property.get({ plain: true })
+      );
       res.render("search-property", {
         properties,
         loggedIn: true,
@@ -102,7 +119,6 @@ router.get("/search/", withAuth, (req, res) => {
     });
 });
 
-
 router.delete("/:id", withAuth, (req, res) => {
   savedProperties
     .destroy({
@@ -112,7 +128,9 @@ router.delete("/:id", withAuth, (req, res) => {
       },
     })
     .then((deleteData) => {
-      const deletedProperty = deleteData.map((property) => property.get({ plain: true }));
+      const deletedProperty = deleteData.map((property) =>
+        property.get({ plain: true })
+      );
       res.render("dashboard", {
         deletedProperty,
         loggedIn: true,
