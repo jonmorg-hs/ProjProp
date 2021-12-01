@@ -74,10 +74,13 @@ router.post("/search/", withAuth, (req, res) => {
           attributes: ["title"],
         },
       },
+      {
+        model: Review,
+        attributes: ["user_id", "property_id", "event_like"],
+      },
     ],
   })
     .then((propertyData) => {
-      console.log(JSON.stringify(propertyData));
       let output = [];
       for (var i = 0; i < propertyData.length; i++) {
         var R = 6371; // Radius of the earth in km
@@ -91,6 +94,14 @@ router.post("/search/", withAuth, (req, res) => {
             Math.sin(dLon / 2);
         var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         var d = R * c; // Distance in km
+        var reviews = propertyData[i]["reviews"].length;
+        var reviewdata = propertyData[i]["reviews"];
+        var like = "like";
+        for (var j = 0; j < reviewdata.length; j++) {
+          if (reviewdata[j]["user_id"] == req.session.user_id) {
+            like = "liked";
+          }
+        }
         if (d < radius) {
           var marker = {};
           marker.id = propertyData[i]["id"];
@@ -112,6 +123,8 @@ router.post("/search/", withAuth, (req, res) => {
             marker.start_time = propertyData[i]["event_start_time"];
             marker.end_time = propertyData[i]["event_end_time"];
           }
+          marker.reviews = reviews;
+          marker.like = like;
           output.push(marker);
         }
       }
@@ -152,7 +165,7 @@ router.get("/saved/", withAuth, (req, res) => {
             },
             {
               model: Review,
-              attributes: ["property_id", "event_like"],
+              attributes: ["user_id", "property_id", "event_like"],
             },
           ],
         },
@@ -162,6 +175,15 @@ router.get("/saved/", withAuth, (req, res) => {
       console.log(JSON.stringify(propertyData));
       let output = [];
       for (var i = 0; i < propertyData.length; i++) {
+        var reviews = propertyData[i]["property"]["reviews"].length;
+        var reviewdata = propertyData[i]["property"]["reviews"];
+        var like = "like";
+        for (var j = 0; j < reviewdata.length; j++) {
+          if (reviewdata[j]["user_id"] == req.session.user_id) {
+            like = "liked";
+          }
+        }
+
         var marker = {};
         marker.id = propertyData[i]["property"]["id"];
         marker.address = propertyData[i]["property"]["address"];
@@ -187,12 +209,8 @@ router.get("/saved/", withAuth, (req, res) => {
           marker.end_time =
             propertyData[i]["property"]["event"]["event_end_time"];
         }
-        if(propertyData[i]["property"]["reviews"].length > 0){
-          marker.reviews = propertyData[i]["property"]["reviews"].length;
-        }
-        else{
-          marker.reviews = 0;
-        }
+        marker.reviews = reviews;
+        marker.like = like;
         output.push(marker);
       }
       res.json(output);
@@ -202,7 +220,6 @@ router.get("/saved/", withAuth, (req, res) => {
       res.status(500).json(err);
     });
 });
-
 
 function deg2rad(deg) {
   return deg * (Math.PI / 180);
