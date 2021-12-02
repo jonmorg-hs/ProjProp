@@ -110,6 +110,7 @@ router.get("/create/", withAuth, (req, res) => {
         } else {
           register[i].like = "like";
         }
+
         if ((register[i].event.event_id === 1)) {
           register[i].option1 = "selected";
           register[i].option2 = "";
@@ -123,6 +124,7 @@ router.get("/create/", withAuth, (req, res) => {
           register[i].option2 = "";
           register[i].option3 = "selected";
         }
+       
       }
       console.log(JSON.stringify(register));
       var send = register[0];

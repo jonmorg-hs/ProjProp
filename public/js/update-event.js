@@ -1,3 +1,4 @@
+
 $(function () {
   $(".datepicker").datepicker({
     dateFormat: "yy-mm-dd",
@@ -10,9 +11,8 @@ $(function () {
 
 function updateeventHandler(event) {
   event.preventDefault();
-
-  // const id = location_id;
   const id = document.querySelector("#propertyId").getAttribute("data-id");
+
   const event_id = document.querySelector("#type-event").value;
   const start_date = document.querySelector("#startdate-event").value;
   const start_time = document.querySelector("#starttime-event").value;
@@ -21,7 +21,7 @@ function updateeventHandler(event) {
   const end_time = document.querySelector("#endtime-event").value;
 
   if (event_id && start_date && end_date && start_time && end_time) {
-    fetch(`/api/events/${id}`, {
+    fetch(`/api/events/`, {
       method: "put",
       body: JSON.stringify({
         event_id,
@@ -44,3 +44,11 @@ function updateeventHandler(event) {
 document
   .querySelector(".event-form")
   .addEventListener("submit", updateeventHandler);
+
+$(".datepicker").datepicker({
+  dateFormat: "d/m/yy",
+  firstDay: 1,
+  changeMonth: true,
+  changeYear: true,
+});
+$(".timepicker").timepicker({ timeFormat: "H:i" });
