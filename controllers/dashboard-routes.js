@@ -10,6 +10,7 @@ const {
 const sequelize = require("../config/connection");
 const withAuth = require("../utils/auth");
 
+
 router.get("/", withAuth, (req, res) => {
   savedProperties
     .findAll({

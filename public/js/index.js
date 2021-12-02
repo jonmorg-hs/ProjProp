@@ -184,7 +184,7 @@ function getsavedmarkers(markers) {
   savedmapmarkers.clearLayers();
   var marker, i;
   for (i = 0; i < markers.length; i++) {
-    var html = `<div style='font:normal 16px arial'><b>${markers[i].address}</b><br/><br/>${markers[i].event}<br/>${markers[i].start_date}${markers[i].start_time}</b><br/><br/><img style='width:200px;height:200px' src='/images/house${markers[i].id}.jpeg' /><br/><br/><img src='/images/saved.png' style='width:30px;cursor:pointer' onclick=\"saveProperty(${markers[i].id})\" /><img id='likeimage_${markers[i].id}' src='/images/${markers[i].like}.png?n=1' style='margin-left:20px;width:30px;cursor:pointer' onclick=\"likeProperty(${markers[i].id},${markers[i].event_id})\") /><label id='like_${markers[i].id}' like='${markers[i].like}' style='margin-left:5px;font:bold 30px arial'>${markers[i].reviews}</label></div>`;
+    var html = `<div style='font:normal 16px arial'><b>${markers[i].address}</b><br/><br/>${markers[i].event}<br/>Start: ${moment(markers[i].start_date).format("MMM Do YY")}  ${markers[i].start_time}</b><br/>End: ${moment(markers[i].end_date).format("MMM Do YY")}  ${markers[i].end_time}</b><br/><br/><img style='width:200px;height:200px' src='/images/house${markers[i].id}.jpeg' /><br/><br/><img src='/images/saved.png' style='width:30px;cursor:pointer' onclick=\"saveProperty(${markers[i].id})\" /><img id='likeimage_${markers[i].id}' src='/images/${markers[i].like}.png?n=1' style='margin-left:20px;width:30px;cursor:pointer' onclick=\"likeProperty(${markers[i].id},${markers[i].event_id})\") /><label id='like_${markers[i].id}' like='${markers[i].like}' style='margin-left:5px;font:bold 30px arial'>${markers[i].reviews}</label></div>`;
     if (markers[i]["event_id"] == 1) {
       mapIcon = xmasIcon;
     } else if (markers[i]["event_id"] == 2) {
@@ -263,7 +263,7 @@ function showMessage(message) {
 }
 
 function likeProperty(property_id) {
-  if ($("#like_" + property_id).attr("like") === "liked") {
+  if ($("#like_" + property_id).attr("like") === "liked" || $("#dlike_" + property_id).attr("like") === "liked") {
     showMessage("You have already liked this property");
   } else {
     var likes = $("#like_" + property_id).text() * 1;
@@ -271,6 +271,8 @@ function likeProperty(property_id) {
     $("#like_" + property_id).html(newlikes);
     $("#like_" + property_id).attr("like", "liked");
     $("#likeimage_" + property_id).attr("src", "/images/liked.png");
+    var likes = $("#dlike_" + property_id).text() * 1;
+    var newlikes = likes + 1;
     $("#dlike_" + property_id).html(newlikes);
     $("#dlike_" + property_id).attr("like", "liked");
     $("#dlikeimage_" + property_id).attr("src", "/images/liked.png");
