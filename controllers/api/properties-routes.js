@@ -172,7 +172,6 @@ router.get("/saved/", withAuth, (req, res) => {
       ],
     })
     .then((propertyData) => {
-      console.log(JSON.stringify(propertyData));
       let output = [];
       for (var i = 0; i < propertyData.length; i++) {
         var reviews = propertyData[i]["property"]["reviews"].length;
