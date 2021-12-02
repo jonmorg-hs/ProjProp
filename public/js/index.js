@@ -399,7 +399,6 @@ function setCurrentPosition(pos) {
   currentlat = pos.coords.latitude;
   currentlng = pos.coords.longitude;
   currentposmarker.clearLayers();
-
   currentPositionMarker = L.marker(
     [pos.coords.latitude, pos.coords.longitude],
     {
@@ -410,6 +409,10 @@ function setCurrentPosition(pos) {
     .bindPopup("current position")
     .openPopup();
   currentposmarker.addLayer(currentPositionMarker);
+}
+
+function displayAndWatch(position) {
+  setCurrentPosition(position);
 }
 
 function saveMapState() {
@@ -470,3 +473,13 @@ $(document).ready(function () {
   }
   savedmarkers();
 });
+
+setInterval(function () {
+  if (!!navigator.geolocation) {
+    wpid = navigator.geolocation.getCurrentPosition(displayAndWatch, locError, {
+      maximumAge: 0,
+      timeout: 1000,
+      enableHighAccuracy: true,
+    });
+  }
+}, 5000);
