@@ -1,16 +1,10 @@
-$(".datepicker").datepicker({
-  dateFormat: "d/m/yy",
-  firstDay: 1,
-  changeMonth: true,
-  changeYear: true,
-});
-$(".timepicker").timepicker({ timeFormat: "H:i" });
-
 function registereventHandler(event) {
   event.preventDefault();
   const event_id = document.querySelector("#type-event").value;
   const start_date = document.querySelector("#startdate-event").value;
   const start = document.querySelector("#starttime-event").value;
+
+  alert(start_date);
   const start_time = parseInt(
     new Date(start_date + " " + start).getTime() / 1000
   ).toFixed(0);
@@ -41,3 +35,11 @@ function registereventHandler(event) {
 document
   .querySelector(".event-form")
   .addEventListener("submit", registereventHandler);
+
+$(".datepicker").datepicker({
+  dateFormat: "d/m/yy",
+  firstDay: 1,
+  changeMonth: true,
+  changeYear: true,
+});
+$(".timepicker").timepicker({ timeFormat: "H:i" });

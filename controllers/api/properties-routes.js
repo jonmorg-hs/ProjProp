@@ -39,13 +39,38 @@ router.post("/save/", withAuth, (req, res) => {
 
 router.post("/like/", withAuth, (req, res) => {
   console.log(req.body);
-  Review.create({
-    user_id: req.session.user_id,
-    event_id: req.body.event_id,
-    property_id: req.body.property_id,
-    event_like: true,
+  Properties.findOne({
+    where: {
+      id: req.body.property_id,
+    },
+    attributes: ["id", "address", "latitude", "longitude"],
+    include: {
+      model: Events,
+      attributes: [
+        "event_id",
+        "event_start_dt",
+        "event_end_dt",
+        "event_start_time",
+        "event_end_time",
+      ],
+    },
   })
-    .then((savedData) => res.json(savedData))
+    .then((results) => {
+      console.log(JSON.stringify(results));
+      var event_id = results["events"].event_id;
+
+      Review.create({
+        user_id: req.session.user_id,
+        property_id: req.body.property_id,
+        event_id: event_id,
+        event_like: true,
+      })
+        .then((savedData) => res.json(savedData))
+        .catch((err) => {
+          console.log(err);
+          res.status(500).json(err);
+        });
+    })
     .catch((err) => {
       console.log(err);
       res.status(500).json(err);

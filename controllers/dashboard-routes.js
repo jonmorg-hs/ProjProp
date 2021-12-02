@@ -126,7 +126,7 @@ router.get("/create/", withAuth, (req, res) => {
             registered: req.session.registered,
           });
         } else {
-          res.render("get-event", {
+          res.render("update-event", {
             send,
             loggedIn: true,
             registered: req.session.registered,
