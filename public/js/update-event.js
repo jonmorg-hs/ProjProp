@@ -6,8 +6,9 @@ $(".datepicker").datepicker({
 });
 $(".timepicker").timepicker({ timeFormat: "H:i" });
 
-function registereventHandler(event) {
+function updateeventHandler(event) {
   event.preventDefault();
+  const id = location_id;
   const event_id = document.querySelector("#type-event").value;
   const start_date = document.querySelector("#startdate-event").value;
   const start = document.querySelector("#starttime-event").value;
@@ -22,8 +23,8 @@ function registereventHandler(event) {
   ).toFixed(0);
 
   if (event_id && start_date && end_date && start_time && end_time) {
-    fetch("/api/events/", {
-      method: "post",
+    fetch(`/api/events/${id}`, {
+      method: "put",
       body: JSON.stringify({
         event_id,
         start_date,
@@ -34,10 +35,10 @@ function registereventHandler(event) {
       headers: { "Content-Type": "application/json" },
     })
       .then((response) => response.json())
-      .then((response) => showMessage("Event registered"));
+      .then((response) => showMessage("Event updated"));
   }
 }
 
 document
   .querySelector(".event-form")
-  .addEventListener("submit", registereventHandler);
+  .addEventListener("submit", updateeventHandler);

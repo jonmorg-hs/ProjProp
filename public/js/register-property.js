@@ -30,7 +30,7 @@ function registerHandler(event) {
           headers: { "Content-Type": "application/json" },
         })
           .then((response) => response.json())
-          .then((response) => alert("Your property has been registered"));
+          .then((response) => showMessage("Your property has been registered"));
       }
     );
   }
