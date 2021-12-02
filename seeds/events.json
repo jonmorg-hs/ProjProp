@@ -3,55 +3,55 @@
   {
     "property_id": 1,
     "event_id": 1,
-    "event_start_time": 6,
-    "event_end_time": 9
+    "event_start_time": "00:00:00",
+    "event_end_time": "00:00:00"
   },
   {
     "property_id": 2,
     "event_id": 1,
-    "event_start_time": 6,
-    "event_end_time": 9
+    "event_start_time": "00:00:00",
+    "event_end_time": "00:00:00"
   },
   {
     "property_id": 3,
     "event_id": 1,
-    "event_start_time": 6,
-    "event_end_time": 9
+    "event_start_time": "00:00:00",
+    "event_end_time": "00:00:00"
   },
   {
     "property_id": 4,
     "event_id": 2,
-    "event_start_time": 6,
-    "event_end_time": 9
+    "event_start_time": "00:00:00",
+    "event_end_time": "00:00:00"
   },
   {
     "property_id": 5,
     "event_id": 2,
-    "event_start_time": 6,
-    "event_end_time": 9
+    "event_start_time": "00:00:00",
+    "event_end_time": "00:00:00"
   },
   {
     "property_id": 6,
     "event_id": 2,
-    "event_start_time": 6,
-    "event_end_time": 9
+    "event_start_time": "00:00:00",
+    "event_end_time": "00:00:00"
   },
   {
     "property_id": 7,
     "event_id": 3,
-    "event_start_time": 6,
-    "event_end_time": 9
+    "event_start_time": "00:00:00",
+    "event_end_time": "00:00:00"
   },
   {
     "property_id": 8,
     "event_id": 3,
-    "event_start_time": 6,
-    "event_end_time": 9
+    "event_start_time": "00:00:00",
+    "event_end_time": "00:00:00"
   },
   {
     "property_id": 9,
     "event_id": 3,
-    "event_start_time": 6,
-    "event_end_time": 9
+    "event_start_time": "00:00:00",
+    "event_end_time": "00:00:00"
   }
 ]
