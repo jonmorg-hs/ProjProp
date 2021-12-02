@@ -83,6 +83,7 @@ router.get("/create/", withAuth, (req, res) => {
       {
         model: Events,
         attributes: [
+          "id",
           "event_id",
           "event_start_dt",
           "event_end_dt",
@@ -91,7 +92,7 @@ router.get("/create/", withAuth, (req, res) => {
         ],
         include: {
           model: Eventtypes,
-          attributes: ["title"],
+          attributes: ["id","title"],
         },
       },
       {
@@ -109,15 +110,21 @@ router.get("/create/", withAuth, (req, res) => {
         } else {
           register[i].like = "like";
         }
-        if (register[i].event.event_id == 1) {
-          register[i].eventselect =
-            "<option value=''>Choose</option><option selected value='1'>Xmas Lights</option><option value='2'>Halloween</option><option value='3'>Garage Sale</option>";
-        } else if (register[i].event.event_id == 2) {
-          register[i].eventselect =
-            "<option value=''>Choose</option><option value='1'>Xmas Lights</option><option selected value='2'>Halloween</option><option value='3'>Garage Sale</option>";
-        } else if (register[i].event.event_id == 3)
-          register[i].eventselect =
-            "<option value=''>Choose</option><option value='1'>Xmas Lights</option><option value='2'>Halloween</option><option selected value='3'>Garage Sale</option>";
+
+        if ((register[i].event.event_id === 1)) {
+          register[i].option1 = "selected";
+          register[i].option2 = "";
+          register[i].option3 = "";
+        } else if ((register[i].event.event_id === 2)) {
+          register[i].option1 = "";
+          register[i].option2 = "selected";
+          register[i].option3 = "";
+        } else {
+          register[i].option1 = "";
+          register[i].option2 = "";
+          register[i].option3 = "selected";
+        }
+       
       }
       console.log(JSON.stringify(register));
       var send = register[0];

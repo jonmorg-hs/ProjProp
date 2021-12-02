@@ -36,11 +36,13 @@ Events.init(
         defaultValue: DataTypes.NOW,
     },
     event_start_time:{
-        type: DataTypes.INTEGER,
+        type: DataTypes.TIME,
+        allowNull: false
         
     },
     event_end_time:{
-        type: DataTypes.INTEGER,
+        type: DataTypes.TIME,
+        allowNull: false
         
     },
   },  
