@@ -9,6 +9,7 @@ const {
 const sequelize = require("../../config/connection");
 const withAuth = require("../../utils/auth");
 
+
 router.post("/", withAuth, (req, res) => {
   Properties.create({
     description: "test",
@@ -39,7 +40,7 @@ router.post("/save/", withAuth, (req, res) => {
 
 router.post("/like/", withAuth, (req, res) => {
   console.log(req.body);
-  Properties.findOne({
+  Properties.findAll({
     where: {
       id: req.body.property_id,
     },
@@ -57,19 +58,19 @@ router.post("/like/", withAuth, (req, res) => {
   })
     .then((results) => {
       console.log(JSON.stringify(results));
-      var event_id = results["events"].event_id;
+      var event_id = results[0]["event"].event_id;
 
-      Review.create({
+  Review.create({
         user_id: req.session.user_id,
         property_id: req.body.property_id,
         event_id: event_id,
         event_like: true,
-      })
+      }) 
         .then((savedData) => res.json(savedData))
         .catch((err) => {
           console.log(err);
           res.status(500).json(err);
-        });
+        }); 
     })
     .catch((err) => {
       console.log(err);
