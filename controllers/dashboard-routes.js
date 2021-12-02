@@ -10,7 +10,6 @@ const {
 const sequelize = require("../config/connection");
 const withAuth = require("../utils/auth");
 
-
 router.get("/", withAuth, (req, res) => {
   savedProperties
     .findAll({
@@ -54,7 +53,6 @@ router.get("/", withAuth, (req, res) => {
         var reviews = reviewdata.length;
         savedProperties[i]["property"]["reviews"] = reviews;
         var like = "like";
-        console.log(JSON.stringify(reviewdata));
         for (var j = 0; j < reviewdata.length; j++) {
           if (reviewdata[j]["user_id"] === req.session.user_id) {
             like = "liked";
@@ -62,6 +60,7 @@ router.get("/", withAuth, (req, res) => {
         }
         savedProperties[i]["property"]["like"] = like;
       }
+      console.log(JSON.stringify(savedProperties));
       res.render("dashboard", {
         savedProperties,
         loggedIn: true,
@@ -93,7 +92,7 @@ router.get("/create/", withAuth, (req, res) => {
         ],
         include: {
           model: Eventtypes,
-          attributes: ["id","title"],
+          attributes: ["id", "title"],
         },
       },
       {
@@ -112,11 +111,11 @@ router.get("/create/", withAuth, (req, res) => {
           register[i].like = "like";
         }
 
-        if ((register[i].event.event_id === 1)) {
+        if (register[i].event.event_id === 1) {
           register[i].option1 = "selected";
           register[i].option2 = "";
           register[i].option3 = "";
-        } else if ((register[i].event.event_id === 2)) {
+        } else if (register[i].event.event_id === 2) {
           register[i].option1 = "";
           register[i].option2 = "selected";
           register[i].option3 = "";
@@ -125,7 +124,6 @@ router.get("/create/", withAuth, (req, res) => {
           register[i].option2 = "";
           register[i].option3 = "selected";
         }
-       
       }
       console.log(JSON.stringify(register));
       var send = register[0];

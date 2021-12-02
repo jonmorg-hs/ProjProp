@@ -182,6 +182,7 @@ function savedmarkers() {
 function getsavedmarkers(markers) {
   console.log(JSON.stringify(markers));
   savedmapmarkers.clearLayers();
+  var searchmarkers = [];
   var marker, i;
   for (i = 0; i < markers.length; i++) {
     var html = `<div style='font:normal 16px arial'><b>${
@@ -222,8 +223,11 @@ function getsavedmarkers(markers) {
       .addTo(map)
       .bindPopup(html);
     savedmapmarkers.addLayer(marker);
+    searchmarkers.push(marker);
   }
   console.log(savedmapmarkers);
+  var search = new L.featureGroup(searchmarkers);
+  map.fitBounds(search.getBounds().pad(0.3));
 }
 
 function getmarkers(markers) {

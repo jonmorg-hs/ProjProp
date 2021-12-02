@@ -5,14 +5,15 @@
     </div>
   </header>
 
- <div class="card-content">
-    <div class="content">
+    <div class="card-content">
+    <div >
     <img src='/images/house{{property.id}}.jpeg' style='height:100px'/>
     </div>
-    <br/> 
-    <div class="post-footer">
-    <img src='/images/trash.png' title="Unlike" style='margin-left:20px;width:30px;cursor:pointer' onclick="removeProperty({{property.id}})"/> 
-    <img id="dlikeimage_{{property.id}}" src='/images/{{property.like}}.png' style='margin-left:20px;width:30px;cursor:pointer' onclick="likeProperty({{property.id}})"/><label id='dlike_{{property.id}}' like='{{property.like}}' style='margin-left:5px;font:bold 30px arial'>{{property.reviews}}</label>
+    {{property.event.eventtype.title}}<br/>{{ format_date property.event.event_start_dt}}  {{property.event.event_start_time}}</b><br/>{{format_date property.event.event_end_dt}} {{property.event.event_end_time}}</b>
+    <div>
+    <img src='/images/trash.png' title="Unlike" style='margin-left:10px;width:30px;cursor:pointer' onclick="removeProperty({{property.id}})"/> 
+    <img id="dlikeimage_{{property.id}}" src="/images/{{property.like}}.png" style="margin-left:10px;width:30px;cursor:pointer" onclick="likeProperty({{property.id}})"/>
+    <label id="dlike_{{property.id}}" like="{{property.like}}" style="display:inline-block;margin-left:5px;width:20px;font:bold 20px arial">{{property.reviews}}</label>
     </div>
         
     </div>
