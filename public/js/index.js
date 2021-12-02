@@ -262,7 +262,7 @@ function showMessage(message) {
   }, 3000);
 }
 
-function likeProperty(property_id, event_id) {
+function likeProperty(property_id) {
   if ($("#like_" + property_id).attr("like") === "liked") {
     showMessage("You have already liked this property");
   } else {
@@ -278,7 +278,6 @@ function likeProperty(property_id, event_id) {
       method: "post",
       body: JSON.stringify({
         property_id,
-        event_id,
       }),
       headers: { "Content-Type": "application/json" },
     })
