@@ -38,7 +38,8 @@ router.get("/", withAuth, (req, res) => {
             },
             {
               model: Review,
-              attributes: ["user_id", "property_id", "event_like"],
+              attributes: ["user_id", "property_id", "event_like"]
+          
             },
           ],
         },

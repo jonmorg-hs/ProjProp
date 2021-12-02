@@ -143,7 +143,7 @@ router.post("/search/", withAuth, (req, res) => {
           } else {
             marker.event_id = propertyData[i]["event"]["event_id"];
             marker.event = propertyData[i]["event"]["eventtype"]["title"];
-            marker.start_date = propertyData[i]["event_start_dt"];
+            marker.start_date = (propertyData[i]["event_start_dt"]).toUTCString();
             marker.end_date = propertyData[i]["event_end_dt"];
             marker.start_time = propertyData[i]["event_start_time"];
             marker.end_time = propertyData[i]["event_end_time"];

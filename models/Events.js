@@ -36,11 +36,15 @@ Events.init(
         defaultValue: DataTypes.NOW,
     },
     event_start_time:{
-        type: DataTypes.INTEGER,
+        type: 'TIMESTAMP',
+        defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
+        allowNull: false
         
     },
     event_end_time:{
-        type: DataTypes.INTEGER,
+        type: 'TIMESTAMP',
+        defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
+        allowNull: false
         
     },
   },  

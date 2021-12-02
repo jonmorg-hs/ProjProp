@@ -1,10 +1,7 @@
-$(".datepicker").datepicker({
-  dateFormat: "d/m/yy",
-  firstDay: 1,
-  changeMonth: true,
-  changeYear: true,
-});
-$(".timepicker").timepicker({ timeFormat: "H:i" });
+$( function() {
+  $(".datepicker").datepicker();
+  $(".timepicker").timepicker();
+} );
 
 function updateeventHandler(event) {
   event.preventDefault();
@@ -34,7 +31,8 @@ function updateeventHandler(event) {
       }),
       headers: { "Content-Type": "application/json" },
     })
-      .then((response) => response.json())
+      .then((response) => {response.json()
+      console.log("UPDATED EVENT",response)})
       .then((response) => showMessage("Event updated"));
   }
 }
