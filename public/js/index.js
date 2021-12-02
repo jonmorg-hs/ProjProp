@@ -203,7 +203,7 @@ function getsavedmarkers(markers) {
       markers[i].id
     },${markers[i].event_id})\") /><label id='like_${markers[i].id}' like='${
       markers[i].like
-    }' style='margin-left:5px;font:bold 30px arial'>${
+    }' style='display:inline-block;margin-left:5px;font:bold 30px arial'>${
       markers[i].reviews
     }</label></div>`;
     if (markers[i]["event_id"] == 1) {
@@ -236,7 +236,7 @@ function getmarkers(markers) {
   var searchmarkers = [];
   var marker, i;
   for (i = 0; i < markers.length; i++) {
-    var html = `<div style='font:normal 16px arial'><b>${markers[i].address}</b><br/><br/>${markers[i].event}<br/>${markers[i].start_date}${markers[i].start_time}</b><br/><br/><img style='width:200px;height:200px' src='/images/house${markers[i].id}.jpeg' /><br/><br/><img src='/images/favorites.png' style='width:30px;cursor:pointer' onclick=\"saveProperty(${markers[i].id})\" /><img id='likeimage_${markers[i].id}' src='/images/${markers[i].like}.png?n=1' style='margin-left:20px;width:30px;cursor:pointer' onclick=\"likeProperty(${markers[i].id},${markers[i].event_id})\") /><label id='like_${markers[i].id}' like='${markers[i].like}' style='margin-left:5px;font:bold 30px arial'>${markers[i].reviews}</label></div>`;
+    var html = `<div style='font:normal 16px arial'><b>${markers[i].address}</b><br/><br/>${markers[i].event}<br/>${markers[i].start_date}${markers[i].start_time}</b><br/><br/><img style='width:200px;height:200px' src='/images/house${markers[i].id}.jpeg' /><br/><br/><img src='/images/favorites.png' style='width:30px;cursor:pointer' onclick=\"saveProperty(${markers[i].id})\" /><img id='likeimage_${markers[i].id}' src='/images/${markers[i].like}.png?n=1' style='margin-left:20px;width:30px;cursor:pointer' onclick=\"likeProperty(${markers[i].id},${markers[i].event_id})\") /><label id='like_${markers[i].id}' like='${markers[i].like}' style='display=inline-block;margin-left:5px;font:bold 30px arial'>${markers[i].reviews}</label></div>`;
     if (markers[i]["event_id"] == 1) {
       mapIcon = xmasIcon;
     } else if (markers[i]["event_id"] == 2) {
