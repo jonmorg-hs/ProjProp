@@ -1,6 +1,6 @@
 <div class="column">
   <div>
-      <label id="propertyId" style="margin-left:10px;font:normal 16px arial;" data-id="{{id}}">{{send.address}}</label>
+      <label id="propertyId" style="margin-left:10px;font:normal 16px arial;" data-id="{{send.event.id}}">{{send.address}}</label>
     </div>
       <div>
       <img src="/images/{{send.like}}.png" style="margin-left:10px;width:30px" /><label style="font:bold 16px arial;margin-left:10px;">{{send.likes}}</label>
@@ -9,28 +9,28 @@
   <h2 class="title">Update Event</h2><hr />
   <form class="event-form">
     <div>
-      <label for="type-event">type:</label>
-      <select id="type-event" ><option value=''>Choose</option><option value='1'>Xmas Lights</option><option value='2'>Halloween</option><option value='3'>Garage Sale</option></select>
+      <label for="type-event">Type:</label>
+      <select id="type-event" ><option value=''>Choose</option><option {{{send.option1}}} value='1'>Xmas Lights</option><option {{{send.option2}}} value='2'>Halloween</option><option {{{send.option3}}} value='3'>Garage Sale</option></select>
     </div>
     <div>
-      <label for="startdate-event">start date:</label>
-      <input type="text" id="startdate-event" class="datepicker">
+      <label for="startdate-event">Start Date:</label>
+      <input type="text" id="startdate-event" class="datepicker" value="{{ format_date send.event.event_start_dt}}"/>
     </div>
     <div>
-      <label for="enddate-event">end date:</label>
-      <input type="text" id="enddate-event" class="datepicker" >
+      <label for="enddate-event">End Date:</label>
+      <input type="text" id="enddate-event" class="datepicker" value="{{ format_date send.event.event_end_dt}}"/>
     </div>
      <div>
-      <label for="starttime-event">start time:</label>
-      <input type="text" id="starttime-event" class="timepicker" />
+      <label for="starttime-event">Start Time:</label>
+      <input type="text" id="starttime-event" class="timepicker" value="{{send.event.event_start_time}}"/>
     </div>   
      <div>
-      <label for="endtime-event">end time:</label>
-      <input type="text" id="endtime-event" class="timepicker" />
+      <label for="endtime-event">End Time:</label>
+      <input type="text" id="endtime-event" class="timepicker" value="{{send.event.event_end_time}}" />
     </div>   
     <div>
-      <button type="submit" class="button">register</button>
-     <a href="/" ><button class="button">cancel</button>
+      <button type="submit" class="button">Update</button>
+     <a href="/" ><button class="button">Cancel</button>
     </div>
   </form>
 </div>

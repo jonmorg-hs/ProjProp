@@ -38,8 +38,7 @@ router.get("/", withAuth, (req, res) => {
             },
             {
               model: Review,
-              attributes: ["user_id", "property_id", "event_like"]
-          
+              attributes: ["user_id", "property_id", "event_like"],
             },
           ],
         },
@@ -84,6 +83,7 @@ router.get("/create/", withAuth, (req, res) => {
       {
         model: Events,
         attributes: [
+          "id",
           "event_id",
           "event_start_dt",
           "event_end_dt",
@@ -92,7 +92,7 @@ router.get("/create/", withAuth, (req, res) => {
         ],
         include: {
           model: Eventtypes,
-          attributes: ["title"],
+          attributes: ["id","title"],
         },
       },
       {
@@ -109,6 +109,19 @@ router.get("/create/", withAuth, (req, res) => {
           register[i].like = "liked";
         } else {
           register[i].like = "like";
+        }
+        if ((register[i].event.event_id === 1)) {
+          register[i].option1 = "selected";
+          register[i].option2 = "";
+          register[i].option3 = "";
+        } else if ((register[i].event.event_id === 2)) {
+          register[i].option1 = "";
+          register[i].option2 = "selected";
+          register[i].option3 = "";
+        } else {
+          register[i].option1 = "";
+          register[i].option2 = "";
+          register[i].option3 = "selected";
         }
       }
       console.log(JSON.stringify(register));

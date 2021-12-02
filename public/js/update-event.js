@@ -21,7 +21,7 @@ function updateeventHandler(event) {
   const end_time = document.querySelector("#endtime-event").value;
 
   if (event_id && start_date && end_date && start_time && end_time) {
-    fetch(`/api/events/${event_id}`, {
+    fetch(`/api/events/${id}`, {
       method: "put",
       body: JSON.stringify({
         event_id,
@@ -35,6 +35,7 @@ function updateeventHandler(event) {
       .then((response) => {
         response.json();
         console.log("UPDATED EVENT", response);
+       // showMessage("Event updated");
       })
       .then((response) => showMessage("Event updated"));
   }
