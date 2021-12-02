@@ -9,7 +9,6 @@ const {
 const sequelize = require("../../config/connection");
 const withAuth = require("../../utils/auth");
 
-
 router.post("/", withAuth, (req, res) => {
   Properties.create({
     description: "test",
@@ -48,6 +47,7 @@ router.post("/like/", withAuth, (req, res) => {
     include: {
       model: Events,
       attributes: [
+        "id",
         "event_id",
         "event_start_dt",
         "event_end_dt",
@@ -60,17 +60,17 @@ router.post("/like/", withAuth, (req, res) => {
       console.log(JSON.stringify(results));
       var event_id = results[0]["event"].event_id;
 
-  Review.create({
+      Review.create({
         user_id: req.session.user_id,
         property_id: req.body.property_id,
         event_id: event_id,
         event_like: true,
-      }) 
+      })
         .then((savedData) => res.json(savedData))
         .catch((err) => {
           console.log(err);
           res.status(500).json(err);
-        }); 
+        });
     })
     .catch((err) => {
       console.log(err);
@@ -89,12 +89,16 @@ router.post("/search/", withAuth, (req, res) => {
       {
         model: Events,
         attributes: [
+          "id",
           "event_id",
           "event_start_dt",
           "event_end_dt",
           "event_start_time",
           "event_end_time",
         ],
+        where: {
+          event_id: req.body.event_id,
+        },
         include: {
           model: Eventtypes,
           attributes: ["title"],
