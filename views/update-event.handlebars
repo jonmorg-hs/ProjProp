@@ -10,26 +10,26 @@
   <form class="event-form">
     <div>
       <label for="type-event">type:</label>
-      <select id="type-event" ><option value=''>Choose</option><option value='1'>Xmas Lights</option><option value='2'>Halloween</option><option value='3'>Garage Sale</option></select>
+      <select id="type-event" >{{send.eventselect}}</select>
     </div>
     <div>
       <label for="startdate-event">start date:</label>
-      <input type="text" id="startdate-event" class="datepicker">
+      <input type="text" id="startdate-event" class="datepicker" value="{{send.event.event_start_dt}}">
     </div>
     <div>
       <label for="enddate-event">end date:</label>
-      <input type="text" id="enddate-event" class="datepicker" >
+      <input type="text" id="enddate-event" class="datepicker" value="{{send.event.event_end_dt}}">
     </div>
      <div>
       <label for="starttime-event">start time:</label>
-      <input type="text" id="starttime-event" class="timepicker" />
+      <input type="text" id="starttime-event" class="timepicker" value="{{send.event.event_start_time}}"/>
     </div>   
      <div>
       <label for="endtime-event">end time:</label>
-      <input type="text" id="endtime-event" class="timepicker" />
+      <input type="text" id="endtime-event" class="timepicker" value="{{send.event.event_end_time}}"/>
     </div>   
     <div>
-      <button type="submit" class="button">register</button>
+      <button type="submit" class="button">update</button>
      <a href="/" ><button class="button">cancel</button>
     </div>
   </form>
