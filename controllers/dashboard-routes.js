@@ -78,21 +78,60 @@ router.get("/create/", withAuth, (req, res) => {
     where: {
       user_id: req.session.user_id,
     },
+    attributes: ["id", "address"],
+    include: [
+      {
+        model: Events,
+        attributes: [
+          "event_id",
+          "event_start_dt",
+          "event_end_dt",
+          "event_start_time",
+          "event_end_time",
+        ],
+        include: {
+          model: Eventtypes,
+          attributes: ["title"],
+        },
+      },
+      {
+        model: Review,
+        attributes: ["user_id", "property_id", "event_like"],
+      },
+    ],
   })
     .then((registerData) => {
       const register = registerData.map((reg) => reg.get({ plain: true }));
-      if (register.length > 0) {
-        res.render("create-event", {
-          register,
+      for (var i = 0; i < register.length; i++) {
+        register[i].reviews = register[i].reviews.length;
+        if (register[i].reviews.length > 0) {
+          register[i].like = "liked";
+        } else {
+          register[i].like = "like";
+        }
+      }
+      console.log(JSON.stringify(register));
+      var send = register[0];
+      if (register.length === 0) {
+        res.render("register-property", {
+          send,
           loggedIn: true,
           registered: req.session.registered,
         });
       } else {
-        res.render("register-property", {
-          register,
-          loggedIn: true,
-          registered: req.session.registered,
-        });
+        if (register[0].event == null) {
+          res.render("create-event", {
+            send,
+            loggedIn: true,
+            registered: req.session.registered,
+          });
+        } else {
+          res.render("get-event", {
+            send,
+            loggedIn: true,
+            registered: req.session.registered,
+          });
+        }
       }
     })
     .catch((err) => {
