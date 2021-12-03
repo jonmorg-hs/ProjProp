@@ -72,19 +72,23 @@ a:hover {
 
 button {
   width: 90px;
-  height: 40px;
+  height: 34px;
   border: 0;
   padding: 1%;
   font-weight: bold;
   transition: background-color 0.1s;
   cursor: pointer;
   border-radius: 5px;
-  background-color: rgb(55, 171, 238);
+  /* background-color: rgb(55, 171, 238); */
+  background-color: var(--primary-blue);
   color: white;
+  width: 100%;
+  margin-bottom: 6px;
 }
 
 button:hover {
-  background-color: #0a5bbe;
+  /* background-color: #0a5bbe; */
+  background: #2c4893;
 }
 
 .navbar-item {
@@ -97,7 +101,7 @@ button:hover {
   margin-left: 10px;
   cursor: pointer;
   font-size: 30px;
-  color: gray;
+  color: #454545;
 }
 .menubtn:hover {
   color: #3486eb;
@@ -107,9 +111,13 @@ button:hover {
 }
 
 .navIcon {
-  margin-top: 15px;
+  margin-top: 0px;
   justify-content: center;
   text-align: left;
+  padding-top: 8px;
+  padding-bottom: 6px;
+  /* background-color: #e9f1f8; */
+  border-radius: 10px;
 }
 
 .saveBtn,
@@ -267,10 +275,23 @@ footer {
 .card {
   border-radius: 10px;
   padding: 5px;
-  border: 2px solid #3486eb;
-  background-color: #fcfcfc;
+  /* border: 2px solid #3486eb; */
+  /* background-color: #fcfcfc; */
+  background: #e9f1f8;
   margin-bottom: 1em;
   margin-top: 1em;
+  /* box-shadow: 1px 1px 1px 1px gray; */
+}
+.trashIcon {
+  margin-left: 10px;
+  font-size: 20px;
+  cursor: pointer;
+  margin-top: -30px;
+  display: absolute;
+  color: #939393;
+}
+.trashIcon:hover {
+  color: crimson;
 }
 
 .card-header {

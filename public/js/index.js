@@ -244,15 +244,15 @@ function getmarkers(markers) {
       markers[i].end_date
     ).format("MMM Do YY")}  ${
       markers[i].end_time
-    }</b><br/><br/><img style='width:200px;height:200px' src='/images/house${
+    }</b><br/><br/><img style='width:341px;height:200px;margin-left:-20px' src='/images/house${
       markers[i].id
-    }.jpeg' /><br/><br/><img src='/images/favorites.png' style='width:30px;cursor:pointer' onclick=\"saveProperty(${
+    }.jpeg' /><br/><br/><i class="fas fa-heart saveBtn" onclick=\"saveProperty(${
       markers[i].id
-    })\" /><img id='likeimage_${markers[i].id}' src='/images/${
-      markers[i].like
-    }.png?n=1' style='margin-left:20px;width:30px;cursor:pointer' onclick=\"likeProperty(${
+    })\"></i><i id='likeimage_${
       markers[i].id
-    },${markers[i].event_id})\") /><label id='like_${markers[i].id}' like='${
+    }' class="fas fa-thumbs-up likeBtn" style='margin-left:20px;magin-top:-30px;' onclick=\"likeProperty(${
+      markers[i].id
+    },${markers[i].event_id})\")></i><label id='like_${markers[i].id}' like='${
       markers[i].like
     }' style='display:inline-block;margin-left:5px;font:bold 30px arial'>${
       markers[i].reviews
