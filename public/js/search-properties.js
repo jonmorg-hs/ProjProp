@@ -6,18 +6,25 @@ function newFormHandler(event) {
   localStorage.setItem("radius", radius);
   const lat = currentlat;
   const lng = currentlng;
-  fetch("/api/properties/search", {
-    method: "post",
-    body: JSON.stringify({
-      radius,
-      lat,
-      lng,
-      event_id,
-    }),
-    headers: { Accept: "application/json", "Content-Type": "application/json" },
-  })
-    .then((response) => response.json())
-    .then((response) => getmarkers(response));
+  if (lat === null) {
+    showMessage("Enable Location Services");
+  } else {
+    fetch("/api/properties/search", {
+      method: "post",
+      body: JSON.stringify({
+        radius,
+        lat,
+        lng,
+        event_id,
+      }),
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((response) => getmarkers(response));
+  }
 }
 
 document
