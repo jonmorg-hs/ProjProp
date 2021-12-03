@@ -185,7 +185,7 @@ function getsavedmarkers(markers) {
   var searchmarkers = [];
   var marker, i;
   for (i = 0; i < markers.length; i++) {
-    var html = `<div style='font:normal 16px arial; border-radius:10px;'><b>${
+    var html = `<div style='font:normal 16px arial; border-radius:20px;'><b>${
       markers[i].address
     }</b><br/><br/>${markers[i].event}<br/><br/>Start: ${moment(
       markers[i].start_date
@@ -236,7 +236,7 @@ function getmarkers(markers) {
   var searchmarkers = [];
   var marker, i;
   for (i = 0; i < markers.length; i++) {
-    var html = `<div style='font:normal 16px arial'><b>${
+    var html = `<div style='font:normal 16px arial;border-radius:20px;'><b>${
       markers[i].address
     }</b><br/><br/>${markers[i].event}<br/>Start: ${moment(
       markers[i].start_date
