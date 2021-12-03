@@ -125,7 +125,6 @@ router.get("/create/", withAuth, (req, res) => {
           register[i].option3 = "selected";
         }
       }
-      console.log(JSON.stringify(register));
       var send = register[0];
       if (register.length === 0) {
         res.render("register-property", {
@@ -133,21 +132,21 @@ router.get("/create/", withAuth, (req, res) => {
           loggedIn: true,
           registered: req.session.registered,
         });
+        //}
+        //else if (register[0].event == null) {
+        //     res.render("create-event", {
+        //      send,
+        //     loggedIn: true,
+        //     registered: req.session.registered,
+        //   });
       } else {
-        if (register[0].event == null) {
-          res.render("create-event", {
-            send,
-            loggedIn: true,
-            registered: req.session.registered,
-          });
-        } else {
-          res.render("update-event", {
-            send,
-            loggedIn: true,
-            registered: req.session.registered,
-          });
-        }
+        res.render("update-event", {
+          send,
+          loggedIn: true,
+          registered: req.session.registered,
+        });
       }
+      //}
     })
     .catch((err) => {
       console.log(err);
