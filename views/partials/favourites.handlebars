@@ -7,7 +7,7 @@
 
     <div class="card-content">
     <div style="display:inline;margin-top:20px;">
-      <img src='/images/house{{property.id}}.jpeg' style='width:50px;border-radius:8px;margin-top:25px;'/>
+      <img src='/images/house{{property.id}}.jpeg' style='width:50px;border-radius:20px;margin-top:25px;'/>
     
     </div>
     <div style="display:absolute; margin-left:80px; margin-top:-50px">
@@ -16,7 +16,7 @@
     </b>
      <hr style="width:100%;text-align:center;opacity:0.2">
     <div>
-    <i class="fas fa-trash trashIcon" title="Unlike" ' onclick="removeProperty({{property.id}})"></i>
+    <i class="fas fa-trash trashIcon" title="Unlike" onclick="removeProperty({{property.id}})"></i>
     <img id="dlikeimage_{{property.id}}" src="/images/{{property.like}}.png" style="margin-left:10px;width:23px;cursor:pointer" onclick="likeProperty({{property.id}})"/>
     <label id="dlike_{{property.id}}" like="{{property.like}}" style="display:inline-block;margin-left:5px;width:10px;font:bold 20px arial">{{property.reviews}}</label>
     </div>
