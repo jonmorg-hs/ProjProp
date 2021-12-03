@@ -21,7 +21,7 @@ function updateeventHandler(event) {
   const end_time = document.querySelector("#endtime-event").value;
 
   if (event_id && start_date && end_date && start_time && end_time) {
-    fetch(`/api/events/`, {
+    fetch(`/api/events/${id}`, {
       method: "put",
       body: JSON.stringify({
         event_id,
@@ -45,10 +45,4 @@ document
   .querySelector(".event-form")
   .addEventListener("submit", updateeventHandler);
 
-$(".datepicker").datepicker({
-  dateFormat: "d/m/yy",
-  firstDay: 1,
-  changeMonth: true,
-  changeYear: true,
-});
-$(".timepicker").timepicker({ timeFormat: "H:i" });
+
