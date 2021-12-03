@@ -227,7 +227,7 @@ function getsavedmarkers(markers) {
   }
   console.log(savedmapmarkers);
   var search = new L.featureGroup(searchmarkers);
-  map.fitBounds(search.getBounds().pad(0.3));
+ // map.fitBounds(search.getBounds().pad(0.3));
 }
 
 function getmarkers(markers) {

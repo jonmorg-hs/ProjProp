@@ -6,11 +6,10 @@ const {
   Eventtypes,
 } = require("../../models");
 const withAuth = require("../../utils/auth");
-const sequelize = require("../../config/connection");
 
-router.get("/", withAuth, (req, res) => {
-  savedProperties
-    .findAll({
+router.get("/", withAuth, async (req, res) => {
+  try {
+    const savedPropertyData = await savedProperties.findAll({
       where: {
         user_id: req.session.user_id,
       },
@@ -41,41 +40,40 @@ router.get("/", withAuth, (req, res) => {
           ],
         },
       ],
-    })
-    .then((dbPostData) => {
-      const results = dbPostData.map((post) => post.get({ plain: true }));
-      console.log(results);
-
-      let output = [];
-      for (var i = 0; i < results.length; i++) {
-        var reviews = results[i]["property"]["reviews"].length;
-        var reviewdata = results[i]["property"]["reviews"];
-        var like = "like";
-        for (var j = 0; j < reviewdata.length; j++) {
-          if (reviewdata[j]["user_id"] == req.session.user_id) {
-            like = "liked";
-          }
-        }
-
-        var marker = {};
-        marker.id = results[i]["id"];
-        marker.address = results[i]["property"]["address"];
-        marker.lat = results[i]["property"]["latitude"];
-        marker.lng = results[i]["property"]["longitude"];
-        marker.event_id = results[i]["events"]["event_id"];
-        marker.event = results[i]["events"]["eventtype"]["title"];
-        marker.start_date = results[i]["events"]["event_start_dt"];
-        marker.end_date = results[i]["events"]["event_end_dt"];
-        marker.reviews = reviews;
-        marker.like = like;
-        output.push(marker);
-      }
-      res.json(output);
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(500).json(err);
     });
+
+    const results = savedPropertyData.map((property) =>
+      property.get({ plain: true })
+    );
+
+    let output = [];
+    for (let i = 0; i < results.length; i++) {
+      let reviews = results[i]["property"]["reviews"].length;
+      let reviewdata = results[i]["property"]["reviews"];
+      let like = "like";
+      for (let j = 0; j < reviewdata.length; j++) {
+        if (reviewdata[j]["user_id"] == req.session.user_id) {
+          like = "liked";
+        }
+      }
+
+      let marker = {};
+      marker.id = results[i]["id"];
+      marker.address = results[i]["property"]["address"];
+      marker.lat = results[i]["property"]["latitude"];
+      marker.lng = results[i]["property"]["longitude"];
+      marker.event_id = results[i]["events"]["event_id"];
+      marker.event = results[i]["events"]["eventtype"]["title"];
+      marker.start_date = results[i]["events"]["event_start_dt"];
+      marker.end_date = results[i]["events"]["event_end_dt"];
+      marker.reviews = reviews;
+      marker.like = like;
+      output.push(marker);
+    }
+    res.json(output);
+  } catch (err) {
+    res.status(500).json(err);
+  }
 });
 
 module.exports = router;
