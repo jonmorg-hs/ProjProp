@@ -110,19 +110,20 @@ router.get("/create/", withAuth, (req, res) => {
         } else {
           register[i].like = "like";
         }
-
-        if (register[i].event.event_id === 1) {
-          register[i].option1 = "selected";
-          register[i].option2 = "";
-          register[i].option3 = "";
-        } else if (register[i].event.event_id === 2) {
-          register[i].option1 = "";
-          register[i].option2 = "selected";
-          register[i].option3 = "";
-        } else {
-          register[i].option1 = "";
-          register[i].option2 = "";
-          register[i].option3 = "selected";
+        if (register[i].event !== null) {
+          if (register[i].event.event_id === 1) {
+            register[i].option1 = "selected";
+            register[i].option2 = "";
+            register[i].option3 = "";
+          } else if (register[i].event.event_id === 2) {
+            register[i].option1 = "";
+            register[i].option2 = "selected";
+            register[i].option3 = "";
+          } else {
+            register[i].option1 = "";
+            register[i].option2 = "";
+            register[i].option3 = "selected";
+          }
         }
       }
       var send = register[0];
@@ -132,13 +133,12 @@ router.get("/create/", withAuth, (req, res) => {
           loggedIn: true,
           registered: req.session.registered,
         });
-        //}
-        //else if (register[0].event == null) {
-        //     res.render("create-event", {
-        //      send,
-        //     loggedIn: true,
-        //     registered: req.session.registered,
-        //   });
+      } else if (register[0].event == null) {
+        res.render("create-event", {
+          send,
+          loggedIn: true,
+          registered: req.session.registered,
+        });
       } else {
         res.render("update-event", {
           send,
@@ -146,7 +146,6 @@ router.get("/create/", withAuth, (req, res) => {
           registered: req.session.registered,
         });
       }
-      //}
     })
     .catch((err) => {
       console.log(err);
