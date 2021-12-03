@@ -6,7 +6,6 @@ const {
   Eventtypes,
   Review,
 } = require("../../models");
-const sequelize = require("../../config/connection");
 const withAuth = require("../../utils/auth");
 
 router.post("/", withAuth, async (req, res) => {
