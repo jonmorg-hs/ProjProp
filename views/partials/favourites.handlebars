@@ -6,14 +6,19 @@
   </header>
 
     <div class="card-content">
-    <div >
-    <img src='/images/house{{property.id}}.jpeg' style='height:100px'/>
+    <div style="display:inline;margin-top:20px;">
+      <img src='/images/house{{property.id}}.jpeg' style='width:50px;border-radius:8px;margin-top:25px;'/>
+    
     </div>
-    {{property.event.eventtype.title}}<br/>{{ format_date property.event.event_start_dt}}  {{property.event.event_start_time}}</b><br/>{{format_date property.event.event_end_dt}} {{property.event.event_end_time}}</b>
+    <div style="display:absolute; margin-left:80px; margin-top:-50px">
+    {{property.event.eventtype.title}}<br/>Start: {{ format_date property.event.event_start_dt}}<br/>End: {{format_date property.event.event_end_dt}}
+    </div>
+    </b>
+     <hr style="width:100%;text-align:center;opacity:0.2">
     <div>
-    <img src='/images/trash.png' title="Unlike" style='margin-left:10px;width:30px;cursor:pointer' onclick="removeProperty({{property.id}})"/> 
-    <img id="dlikeimage_{{property.id}}" src="/images/{{property.like}}.png" style="margin-left:10px;width:30px;cursor:pointer" onclick="likeProperty({{property.id}})"/>
-    <label id="dlike_{{property.id}}" like="{{property.like}}" style="display:inline-block;margin-left:5px;width:20px;font:bold 20px arial">{{property.reviews}}</label>
+    <i class="fas fa-trash trashIcon" title="Unlike" ' onclick="removeProperty({{property.id}})"></i>
+    <img id="dlikeimage_{{property.id}}" src="/images/{{property.like}}.png" style="margin-left:10px;width:23px;cursor:pointer" onclick="likeProperty({{property.id}})"/>
+    <label id="dlike_{{property.id}}" like="{{property.like}}" style="display:inline-block;margin-left:5px;width:10px;font:bold 20px arial">{{property.reviews}}</label>
     </div>
         
     </div>
