@@ -1,6 +1,5 @@
 const router = require("express").Router();
 const { Events, Properties } = require("../../models");
-const sequelize = require("../../config/connection");
 const withAuth = require("../../utils/auth");
 
 router.post("/", withAuth, async (req, res) => {
@@ -33,32 +32,32 @@ router.post("/", withAuth, async (req, res) => {
   }
 });
 
-router.put("/:id", withAuth, (req, res) => {
-  Events.update(
-    {
-      event_id: req.body.event_id,
-      event_start_dt: req.body.start_date,
-      event_end_dt: req.body.end_date,
-      event_start_time: req.body.start_time,
-      event_end_time: req.body.end_time,
-    },
-    {
-      where: {
-        id: req.params.id,
+router.put("/:id", withAuth, async (req, res) => {
+  try {
+    const updateEventData = await Events.update(
+      {
+        event_id: req.body.event_id,
+        event_start_dt: req.body.start_date,
+        event_end_dt: req.body.end_date,
+        event_start_time: req.body.start_time,
+        event_end_time: req.body.end_time,
       },
-    }
-  )
-    .then((updateEventData) => {
-      if (!updateEventData) {
-        res.status(404).json({ message: "No post found with this id" });
-        return;
+      {
+        where: {
+          id: req.params.id,
+        },
       }
-      res.json(updateEventData);
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(500).json(err);
-    });
+    );
+
+    if (!updateEventData) {
+      res.status(404).json({ message: "No post found with this id" });
+      return;
+    }
+    res.json(updateEventData);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
 });
 
 module.exports = router;
