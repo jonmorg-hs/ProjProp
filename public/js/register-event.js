@@ -2,22 +2,10 @@ function registereventHandler(event) {
   event.preventDefault();
   const event_id = document.querySelector("#type-event").value;
   const start_date = document.querySelector("#startdate-event").value;
-  //const start = document.querySelector("#starttime-event").value;
   const start_time = document.querySelector("#starttime-event").value;
-
- /*  alert(start_date);
-  const start_time = parseInt(
-    new Date(start_date + " " + start).getTime() / 1000
-  ).toFixed(0); */
-
   const end_date = document.querySelector("#enddate-event").value;
- // const end = document.querySelector("#endtime-event").value;
   const end_time = document.querySelector("#endtime-event").value;
- 
-  /*  const end_time = parseInt(
-    new Date(end_date + " " + end).getTime() / 1000
-  ).toFixed(0);
- */
+
   if (event_id && start_date && end_date && start_time && end_time) {
     fetch("/api/events/", {
       method: "post",
@@ -46,3 +34,16 @@ $(".datepicker").datepicker({
   changeYear: true,
 });
 $(".timepicker").timepicker({ timeFormat: "H:i" });
+
+document
+  .querySelector('input[type="file"]')
+  .addEventListener("change", function () {
+    if (this.files && this.files[0]) {
+      var img = document.querySelector("myImg");
+      img.onload = () => {
+        URL.revokeObjectURL(img.src); // no longer needed, free memory
+      };
+
+      img.src = URL.createObjectURL(this.files[0]); // set src to blob url
+    }
+  });

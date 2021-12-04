@@ -51,14 +51,16 @@
       src="https://cdn.jsdelivr.net/gh/hosuaby/Leaflet.SmoothMarkerBouncing@v2.0.0/dist/bundle.js"
       crossorigin="anonymous"
     ></script>
+    <script src="/js/howler.core.js"></script>
   </head>
   <body>
     {{#if loggedIn}}
       <div id="map"></div>
+      <img id="menubtn" src="/images/menu-icon.png" style="cursor:pointer;position:absolute;top:10px;left:10px;width:50px;display:none" onclick="$('#menu').show()">
       <div id="menu">
         <img id="menuclosebtn" src="/images/close.png" />
         <h1 style="margin-left:10px">MY FRONTYARD</h1>
-        <div style="width:100%">
+        <div style="width:100%;z-index:2">
           {{#if registered}}
             <a href="/dashboard/create/" class="navbar-item"><img
                 id="event"
@@ -87,10 +89,8 @@
           </a>
           <img id="logout" class="menubtn" src="/images/logout.png" />
         </div>
-        <br />
-        <label id="message" style="font:bold 16px arial;color:red"></label>
-        <br />
-        <main class="main">
+        <div style="margin-top:10px"><label id="message" style="margin-left:10px;font:bold 16px arial;color:red"></label></div>
+        <main class="main" style="overflow:scroll;max-height: 800px">
           {{{body}}}
         </main>
       </div>

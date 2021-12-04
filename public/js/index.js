@@ -1,40 +1,25 @@
-var wpid = false;
-var z,
-  op,
-  prev_lat,
-  prev_lng,
-  min_speed = 0,
-  max_speed = 0,
-  min_altitude = 0,
-  max_altitude = 0,
-  distance_travelled = 0,
-  min_accuracy = 150,
-  date_pos_updated = "",
-  info_string = "";
-
-var currentpos;
-var currentPositionMarker;
-
+let wpid = false;
+let currentpos;
+let currentPositionMarker;
 let currentlat, currentlng;
-var markerid;
 
-var markerscales = [
+let markerscales = [
   1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 14, 18, 22, 25, 28, 32, 35, 38, 40, 42, 44, 46,
   48, 50,
 ];
 
-var currentposmarker = new L.LayerGroup();
-var mapmarkers = new L.LayerGroup();
-var savedmapmarkers = new L.LayerGroup();
+let currentposmarker = new L.LayerGroup();
+let mapmarkers = new L.LayerGroup();
+let savedmapmarkers = new L.LayerGroup();
 
-var myposIcon = L.icon({
+let myposIcon = L.icon({
   iconUrl: "/images/pos.png",
   iconSize: [10, 10],
   iconAnchor: [5, 5],
   popupAnchor: [0, -15],
 });
 
-var xmasIcon = L.icon({
+let xmasIcon = L.icon({
   id: "",
   event_id: "",
   iconUrl: "/images/xmas_tree.png",
@@ -43,7 +28,7 @@ var xmasIcon = L.icon({
   popupAnchor: [0, -55],
 });
 
-var halloweenIcon = L.icon({
+let halloweenIcon = L.icon({
   id: "",
   event_id: "",
   iconUrl: "/images/halloween.png",
@@ -52,7 +37,7 @@ var halloweenIcon = L.icon({
   popupAnchor: [0, -55],
 });
 
-var garagesaleIcon = L.icon({
+let garagesaleIcon = L.icon({
   id: "",
   event_id: "",
   iconUrl: "/images/garagesale.png",
@@ -61,18 +46,22 @@ var garagesaleIcon = L.icon({
   popupAnchor: [0, -55],
 });
 
-var route_pts = [];
+let route_pts = [];
 
 $("#radius-search").val(localStorage.getItem("radius"));
+let menubtn = document.getElementById("menubtn");
+let menuclosebtn = document.getElementById("menuclosebtn");
+let menudata = document.getElementById("menudata");
 
-var menuclosebtn = document.getElementById("menuclosebtn");
-var menudata = document.getElementById("menudata");
-
-menuclosebtn.addEventListener("click", function () {
-  document.getElementById("menu").style.display = "none";
+menubtn.addEventListener("click", function () {
+  toggleMenu("show");
 });
 
-var map = L.map("map", { minZoom: 3, maxZoom: 22 }).setView(
+menuclosebtn.addEventListener("click", function () {
+  toggleMenu("hide");
+});
+
+let map = L.map("map", { minZoom: 3, maxZoom: 22 }).setView(
   [-37.77669, 145.05574],
   18
 );
@@ -80,7 +69,7 @@ var map = L.map("map", { minZoom: 3, maxZoom: 22 }).setView(
 map.locate({ setView: true, maxZoom: 16 });
 
 map.zoomControl.setPosition("bottomright");
-var baselayer = L.tileLayer(
+let baselayer = L.tileLayer(
   "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
   {
     maxZoom: 22,
@@ -90,10 +79,10 @@ var baselayer = L.tileLayer(
 ).addTo(map);
 
 map.on("zoomend", function () {
-  var currentZoom = map.getZoom();
-  var newSize = markerscales[currentZoom];
-  var newoffset = -1 * newSize - 5;
-  var newmidoffset = newSize / 2;
+  let currentZoom = map.getZoom();
+  let newSize = markerscales[currentZoom];
+  let newoffset = -1 * newSize - 5;
+  let newmidoffset = newSize / 2;
   savedmapmarkers.eachLayer(function (layer) {
     if (layer.options.event_id == 1) {
       xmasIcon = new L.Icon({
@@ -180,12 +169,11 @@ function savedmarkers() {
 }
 
 function getsavedmarkers(markers) {
-  console.log(JSON.stringify(markers));
   savedmapmarkers.clearLayers();
-  var searchmarkers = [];
-  var marker, i;
+  let searchmarkers = [];
+  let marker, i;
   for (i = 0; i < markers.length; i++) {
-    var html = `<div style='font:normal 16px arial'><b>${
+    let html = `<div style='font:normal 16px arial'><b>${
       markers[i].address
     }</b><br/><br/>${markers[i].event}<br/>Start: ${moment(
       markers[i].start_date
@@ -221,22 +209,21 @@ function getsavedmarkers(markers) {
       event_id: markers[i]["event_id"],
     })
       .addTo(map)
+      .on("click", onClick)
       .bindPopup(html);
     savedmapmarkers.addLayer(marker);
     searchmarkers.push(marker);
   }
-  console.log(savedmapmarkers);
-  var search = new L.featureGroup(searchmarkers);
+  let search = new L.featureGroup(searchmarkers);
   map.fitBounds(search.getBounds().pad(0.3));
 }
 
 function getmarkers(markers) {
-  console.log(JSON.stringify(markers));
   mapmarkers.clearLayers();
-  var searchmarkers = [];
-  var marker, i;
+  let searchmarkers = [];
+  let marker, i;
   for (i = 0; i < markers.length; i++) {
-    var html = `<div style='font:normal 16px arial'><b>${
+    let html = `<div style='font:normal 16px arial'><b>${
       markers[i].address
     }</b><br/><br/>${markers[i].event}<br/>Start: ${moment(
       markers[i].start_date
@@ -246,9 +233,10 @@ function getmarkers(markers) {
       markers[i].end_time
     }</b><br/><br/><img style='width:200px;height:200px' src='/images/house${
       markers[i].id
-    }.jpeg' /><br/><br/><img src='/images/favorites.png' style='width:30px;cursor:pointer' onclick=\"saveProperty(${
-      markers[i].id
-    })\" /><img id='likeimage_${markers[i].id}' src='/images/${
+    }.jpeg' /><br/><br/><img id='fav_${markers[i].id}' save='0'
+      src='/images/favorites.png' style='width:30px;cursor:pointer' onclick=\"saveProperty(${
+        markers[i].id
+      })\" /><img id='likeimage_${markers[i].id}' src='/images/${
       markers[i].like
     }.png?n=1' style='margin-left:20px;width:30px;cursor:pointer' onclick=\"likeProperty(${
       markers[i].id
@@ -272,25 +260,44 @@ function getmarkers(markers) {
       event_id: markers[i]["event_id"],
     })
       .addTo(map)
+      .on("click", onClick)
       .bindPopup(html);
     mapmarkers.addLayer(marker);
     searchmarkers.push(marker);
   }
-  $("#menu").css({ height: "250px" });
-  var search = new L.featureGroup(searchmarkers);
+  let search = new L.featureGroup(searchmarkers);
   map.fitBounds(search.getBounds().pad(0.3));
+  if ($("#event-search").val() == 1) {
+    xmas_sound.play();
+  } else if ($("#event-search").val() == 2) {
+    halloweend_sound.play();
+  }
+  if ($(window).width() < 600) {
+    toggleMenu("hide");
+  }
+}
+
+function onClick() {
+  if ($(window).width() < 600) {
+    toggleMenu("hide");
+  }
+}
+
+function toggleMenu(display) {
+  if (display === "hide") {
+    document.getElementById("menu").style.display = "none";
+    document.getElementById("menubtn").style.display = "block";
+  } else {
+    document.getElementById("menu").style.display = "block";
+    document.getElementById("menubtn").style.display = "none";
+  }
 }
 
 function saveProperty(id) {
-  var check = 0;
-  savedmapmarkers.eachLayer(function (layer) {
-    if (layer.options.id == id) {
-      check = 1;
-    }
-  });
-  if (check == 1) {
+  if ($("#fav_" + id).attr("save") * 1 === 1) {
     showMessage("Property already a favorite");
   } else {
+    $("#fav_" + id).attr({ save: 1, src: "/images/saved.png" });
     fetch("/api/properties/save/", {
       method: "post",
       body: JSON.stringify({
@@ -317,14 +324,14 @@ function likeProperty(property_id) {
   ) {
     showMessage("You have already liked this property");
   } else {
-    var likes = $("#like_" + property_id).text() * 1;
-    var newlikes = likes + 1;
+    let likes = $("#like_" + property_id).text() * 1;
+    let newlikes = likes + 1;
     $("#like_" + property_id).html(newlikes);
     $("#like_" + property_id).attr("like", "liked");
     $("#likeimage_" + property_id).attr("src", "/images/liked.png");
-    var likes = $("#dlike_" + property_id).text() * 1;
-    var newlikes = likes + 1;
-    $("#dlike_" + property_id).html(newlikes);
+    let dashlikes = $("#dlike_" + property_id).text() * 1;
+    let dashnewlikes = dashlikes + 1;
+    $("#dlike_" + property_id).html(dashnewlikes);
     $("#dlike_" + property_id).attr("like", "liked");
     $("#dlikeimage_" + property_id).attr("src", "/images/liked.png");
     fetch("/api/properties/like/", {
@@ -340,7 +347,7 @@ function likeProperty(property_id) {
 }
 
 function removeProperty(property_id) {
-  var check = confirm(
+  let check = confirm(
     "Do you wish to remove this property from your favorites"
   );
 
@@ -364,7 +371,9 @@ function showMarker(id) {
       layer.stopBouncing();
     }
   });
-  $("#menu").css({ height: "250px" });
+  if ($(window).width() < 600) {
+    toggleMenu("hide");
+  }
 }
 
 function getEventLikes(property_id) {
@@ -386,10 +395,10 @@ function displayAndWatch(position) {
 function locError(error) {
   switch (error.code) {
     case error.PERMISSION_DENIED:
-      console.log("permission denied");
+      showMessage("location services permission denied");
       break;
     case error.POSITION_UNAVAILABLE:
-      console.log("position unavailable");
+      showMessage("gps position unavailable");
       wpid = navigator.geolocation.getCurrentPosition(
         displayAndWatch,
         locError,
@@ -397,7 +406,7 @@ function locError(error) {
       );
       break;
     case error.TIMEOUT:
-      console.log("timeout");
+      showMessgae("gps timeout");
       wpid = navigator.geolocation.getCurrentPosition(
         displayAndWatch,
         locError,
@@ -405,7 +414,7 @@ function locError(error) {
       );
       break;
     case error.UNKNOWN_ERROR:
-      console.log("unknown error");
+      showMessage("unknown gps error");
       wpid = navigator.geolocation.getCurrentPosition(
         displayAndWatch,
         locError,
@@ -426,55 +435,8 @@ function setCurrentPosition(pos) {
     }
   )
     .addTo(map)
-    .bindPopup("current position")
-    currentposmarker.addLayer(currentPositionMarker);
-}
-
-
-function saveMapState() {
-  var mapZoom = map.getZoom();
-  var mapCentre = map.getCenter();
-  var mapLat = mapCentre.lat();
-  var mapLng = mapCentre.lng();
-  var cookiestring = mapLat + "_" + mapLng + "_" + mapZoom;
-  setCookie("myMapCookie", cookiestring, 30);
-}
-
-function loadMapState() {
-  var gotCookieString = getCookie("myMapCookie");
-  var splitStr = gotCookieString.split("_");
-  var savedMapLat = parseFloat(splitStr[0]);
-  var savedMapLng = parseFloat(splitStr[1]);
-  var savedMapZoom = parseFloat(splitStr[2]);
-  if (!isNaN(savedMapLat) && !isNaN(savedMapLng) && !isNaN(savedMapZoom)) {
-    map.setCenter(new google.maps.LatLng(savedMapLat, savedMapLng));
-    map.setZoom(savedMapZoom);
-  }
-}
-
-function setCookie(c_name, value, exdays) {
-  var exdate = new Date();
-  exdate.setDate(exdate.getDate() + exdays);
-  var c_value =
-    escape(value) +
-    (exdays == null ? "" : "; expires = " + exdate.toUTCString());
-  document.cookie = c_name + " = " + c_value;
-}
-
-function getCookie(c_name) {
-  var i,
-    x,
-    y,
-    ARRcookies = document.cookie.split(";");
-  for (i = 0; i < ARRcookies.length; i++) {
-    x = ARRcookies[i].substr(0, ARRcookies[i].indexOf("="));
-    y = ARRcookies[i].substr(ARRcookies[i].indexOf("=") + 1);
-    x = x.replace(/^\s+|\s+$/g, "");
-    if (x == c_name) {
-      return unescape(y);
-    }
-  }
-  return "";
+    .bindPopup("current position");
+  currentposmarker.addLayer(currentPositionMarker);
 }
 
 $(document).ready(function () {
@@ -500,3 +462,14 @@ setInterval(function () {
   }
 }, 5000);
 
+let xmas_sound = new Howl({
+  src: ["/audio/xmas_sound.mp3"],
+  autoplay: false,
+  volume: 0.6,
+});
+
+let halloweend_sound = new Howl({
+  src: ["/audio/halloween_sound.mp3"],
+  autoplay: false,
+  volume: 0.6,
+});

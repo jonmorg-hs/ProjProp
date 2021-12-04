@@ -3,7 +3,7 @@
       <label style="margin-left:10px;font:normal 16px arial;">{{send.address}}</label>
     </div>
       <div>
-      <img src="/images/{{send.like}}.png" style="margin-left:10px;width:30px" /><label style="font:bold 16px arial;margin-left:10px;">{{send.likes}}</label>
+      <img src="/images/{{send.like}}.png" style="margin-left:10px;width:30px" /><label style="display:inline-block;font:bold 16px arial;margin-left:10px;">{{send.reviews}}</label>
     </div>
 
   <h2 class="title">Register Event</h2><hr />
@@ -29,6 +29,12 @@
       <input type="text" id="endtime-event" class="timepicker" />
     </div>   
     <div>
+    <div>
+      <label for="image-event">Photo:</label>
+      <input id="image-event" type='file' />
+      <br><img id="myImg" src="#">
+      <br/><br/>
+    </div>
       <button type="submit" class="button">register</button>
      <a href="/" ><button class="button">cancel</button>
     </div>
