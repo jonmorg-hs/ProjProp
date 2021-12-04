@@ -28,7 +28,11 @@ body {
   z-index: 99;
   background-color: white;
 }
-#menu {
+.menuBar {
+  font-size: 35px;
+  color: #2c499a;
+}
+go #menu {
   position: absolute;
   left: 25px;
   top: 25px;
