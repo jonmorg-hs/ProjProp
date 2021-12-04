@@ -5,7 +5,7 @@ const propertiesRoutes = require("./properties-routes");
 const eventsRoutes = require("./events-routes");
 
 router.use("/users", userRoutes);
-router.use("/properties", propertiesRoutes);
+router.use("/properties", propertiesRoutes.router);
 router.use("/events", eventsRoutes);
 
 module.exports = router;

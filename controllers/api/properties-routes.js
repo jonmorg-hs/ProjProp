@@ -1,4 +1,5 @@
 const router = require("express").Router();
+
 const {
   Properties,
   savedProperties,
@@ -106,53 +107,14 @@ router.post("/search/", withAuth, async (req, res) => {
       ],
     });
 
-    let output = [];
-    for (let i = 0; i < propertyData.length; i++) {
-      let R = 6371; // Radius of the earth in km
-      let dLat = deg2rad(propertyData[i]["latitude"] - lat); // deg2rad below
-      let dLon = deg2rad(propertyData[i]["longitude"] - lng);
-      let a =
-        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-        Math.cos(deg2rad(lat)) *
-          Math.cos(deg2rad(propertyData[i]["latitude"])) *
-          Math.sin(dLon / 2) *
-          Math.sin(dLon / 2);
-      let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-      let d = R * c; // Distance in km
-      let reviews = propertyData[i]["reviews"].length;
-      let reviewdata = propertyData[i]["reviews"];
-      let like = "like";
-      for (let j = 0; j < reviewdata.length; j++) {
-        if (reviewdata[j]["user_id"] == req.session.user_id) {
-          like = "liked";
-        }
-      }
-      if (d < radius) {
-        let marker = {};
-        marker.id = propertyData[i]["id"];
-        marker.address = propertyData[i]["address"];
-        marker.lat = propertyData[i]["latitude"];
-        marker.lng = propertyData[i]["longitude"];
-        if (propertyData[i]["event"] == null) {
-          marker.event_id = "";
-          marker.event = "";
-          marker.start_date = "";
-          marker.end_date = "";
-          marker.start_time = "";
-          marker.end_time = "";
-        } else {
-          marker.event_id = propertyData[i]["event"]["event_id"];
-          marker.event = propertyData[i]["event"]["eventtype"]["title"];
-          marker.start_date = propertyData[i]["event"]["event_start_dt"];
-          marker.end_date = propertyData[i]["event"]["event_end_dt"];
-          marker.start_time = propertyData[i]["event"]["event_start_time"];
-          marker.end_time = propertyData[i]["event"]["event_end_time"];
-        }
-        marker.reviews = reviews;
-        marker.like = like;
-        output.push(marker);
-      }
-    }
+    let output = radiusSearch(
+      propertyData,
+      lat,
+      lng,
+      req.session.user_id,
+      radius
+    );
+
     res.json(output);
   } catch (err) {
     console.log(err);
@@ -242,8 +204,59 @@ router.get("/saved/", withAuth, async (req, res) => {
   }
 });
 
+function radiusSearch(propertyData, lat, lng, user_id, radius) {
+  let output = [];
+  for (let i = 0; i < propertyData.length; i++) {
+    let R = 6371; // Radius of the earth in km
+    let dLat = deg2rad(propertyData[i]["latitude"] - lat); // deg2rad below
+    let dLon = deg2rad(propertyData[i]["longitude"] - lng);
+    let a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(deg2rad(lat)) *
+        Math.cos(deg2rad(propertyData[i]["latitude"])) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
+    let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    let d = R * c; // Distance in km
+    let reviews = propertyData[i]["reviews"].length;
+    let reviewdata = propertyData[i]["reviews"];
+    let like = "like";
+    for (let j = 0; j < reviewdata.length; j++) {
+      if (reviewdata[j]["user_id"] == user_id) {
+        like = "liked";
+      }
+    }
+    if (d < radius) {
+      let marker = {};
+      marker.id = propertyData[i]["id"];
+      marker.address = propertyData[i]["address"];
+      marker.lat = propertyData[i]["latitude"];
+      marker.lng = propertyData[i]["longitude"];
+      if (propertyData[i]["event"] == null) {
+        marker.event_id = "";
+        marker.event = "";
+        marker.start_date = "";
+        marker.end_date = "";
+        marker.start_time = "";
+        marker.end_time = "";
+      } else {
+        marker.event_id = propertyData[i]["event"]["event_id"];
+        marker.event = propertyData[i]["event"]["eventtype"]["title"];
+        marker.start_date = propertyData[i]["event"]["event_start_dt"];
+        marker.end_date = propertyData[i]["event"]["event_end_dt"];
+        marker.start_time = propertyData[i]["event"]["event_start_time"];
+        marker.end_time = propertyData[i]["event"]["event_end_time"];
+      }
+      marker.reviews = reviews;
+      marker.like = like;
+      output.push(marker);
+    }
+  }
+  return output;
+}
+
 function deg2rad(deg) {
   return deg * (Math.PI / 180);
 }
 
-module.exports = router;
+module.exports = { router, radiusSearch };
