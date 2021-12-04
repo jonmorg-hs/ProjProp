@@ -103,12 +103,12 @@ router.get("/create/", withAuth, async (req, res) => {
 
     const register = registerData.map((reg) => reg.get({ plain: true }));
     for (let i = 0; i < register.length; i++) {
-      register[i].reviews = register[i].reviews.length;
       if (register[i].reviews.length > 0) {
         register[i].like = "liked";
       } else {
         register[i].like = "like";
       }
+      register[i].reviews = register[i].reviews.length;
       if (register[i].event !== null) {
         if (register[i].event.event_id === 1) {
           register[i].option1 = "selected";

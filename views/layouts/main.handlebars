@@ -55,10 +55,12 @@
       src="https://cdn.jsdelivr.net/gh/hosuaby/Leaflet.SmoothMarkerBouncing@v2.0.0/dist/bundle.js"
       crossorigin="anonymous"
     ></script>
+    <script src="/js/howler.core.js"></script>
   </head>
   <body>
     {{#if loggedIn}}
       <div id="map"></div>
+      <img id="menubtn" src="/images/menu-icon.png" style="cursor:pointer;position:absolute;top:10px;left:10px;width:50px;display:none" onclick="$('#menu').show()">
       <div id="menu">
         <h1 class="dashTitle" style="margin-left:10px">MY FRONTYARD</h1>
         <img id="menuclosebtn" src="/images/close.png" />

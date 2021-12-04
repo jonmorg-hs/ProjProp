@@ -1,4 +1,3 @@
-
 $(function () {
   $(".datepicker").datepicker({
     dateFormat: "yy-mm-dd",
@@ -35,7 +34,7 @@ function updateeventHandler(event) {
       .then((response) => {
         response.json();
         console.log("UPDATED EVENT", response);
-       // showMessage("Event updated");
+        // showMessage("Event updated");
       })
       .then((response) => showMessage("Event updated"));
   }
@@ -45,4 +44,15 @@ document
   .querySelector(".event-form")
   .addEventListener("submit", updateeventHandler);
 
+document
+  .querySelector('input[type="file"]')
+  .addEventListener("change", function () {
+    if (this.files && this.files[0]) {
+      var img = document.querySelector("myImg");
+      img.onload = () => {
+        URL.revokeObjectURL(img.src); // no longer needed, free memory
+      };
 
+      img.src = URL.createObjectURL(this.files[0]); // set src to blob url
+    }
+  });
