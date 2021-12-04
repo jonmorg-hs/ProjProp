@@ -50,7 +50,7 @@ router.put("/:id", withAuth, async (req, res) => {
     );
 
     if (!updateEventData) {
-      res.status(404).json({ message: "No post found with this id" });
+      res.status(404).json({ message: "No event found with this id" });
       return;
     }
     res.json(updateEventData);
