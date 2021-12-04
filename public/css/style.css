@@ -29,10 +29,14 @@ body {
   background-color: white;
 }
 .menuBar {
-  font-size: 35px;
+  font-size: 36px;
   color: #2c499a;
+  /* color: #233975; */
 }
-go #menu {
+.menuBar:hover {
+  color: #296fc4;
+}
+#menu {
   position: absolute;
   left: 25px;
   top: 25px;
@@ -47,9 +51,14 @@ go #menu {
 }
 #menuclosebtn {
   width: 25px;
-  right: 8px;
+  top: 15px;
+  right: 1px;
   position: absolute;
   cursor: pointer;
+  color: rgb(171, 171, 171);
+}
+#menuclosebtn:hover {
+  color: rgb(135, 135, 135);
 }
 #title {
   margin-left: 20px;
@@ -91,7 +100,7 @@ button {
   background-color: var(--primary-blue);
   color: white;
   width: 100%;
-  margin-bottom: 8px;
+  margin-bottom: 0px;
 }
 
 button:hover {
