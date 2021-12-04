@@ -6,9 +6,7 @@ function newFormHandler(event) {
   localStorage.setItem("radius", radius);
   const lat = currentlat;
   const lng = currentlng;
-  if (lat === null) {
-    showMessage("Enable Location Services");
-  } else if (event_id == 0) {
+  if (event_id == 0) {
     showMessage("Please choose an event to search");
   } else {
     fetch("/api/properties/search", {

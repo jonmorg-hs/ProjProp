@@ -36,14 +36,10 @@ body {
   max-height: calc(100% - 50px);
   background-color: #fdfdfd;
   z-index: 3;
-<<<<<<< HEAD
-  border-radius: 5px;
-=======
   border-radius: 20px;
   padding: 12px;
   overflow: scroll;
   box-shadow: 1px 1px 1px 1px gray;
->>>>>>> origin
 }
 #menuclosebtn {
   width: 25px;
