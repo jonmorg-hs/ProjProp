@@ -60,7 +60,14 @@ let baselayer = L.tileLayer(
   }
 ).addTo(map);
 
-function getIconForEvent(layer, event_id, image, newSize, newmidoffset, newoffset) {
+function getIconForEvent(
+  layer,
+  event_id,
+  image,
+  newSize,
+  newmidoffset,
+  newoffset
+) {
   return new L.Icon({
     id: layer.options.event_id,
     event_id: event_id,
@@ -176,11 +183,13 @@ function getsavedmarkers(markers) {
       markers[i].end_time
     }</b><br/><br/><img style='width:341px;height:200px;margin-left:-20px' src='/images/house${
       markers[i].id
-    }.jpeg' /><br/><br/><i class="fas fa-heart saveBtn" onclick=\"saveProperty(${
+    }.jpeg' /><br/><br/><i id="fav_${
       markers[i].id
-    })\"></i><i id='likeimage_${
+    }" save="1" class="fas fa-heart savedBtn" onclick=\"saveProperty(${
       markers[i].id
-    }' class="fas fa-thumbs-up likeBtn" style='margin-left:20px;magin-bottom:20px;' onclick=\"likeProperty(${
+    })\"></i><i id='likeimage_${markers[i].id}' class="fas fa-thumbs-up ${
+      markers[i].likeBtn
+    }" style='margin-left:20px;magin-bottom:20px;' onclick=\"likeProperty(${
       markers[i].id
     },${markers[i].event_id})\")></i><label id='like_${markers[i].id}' like='${
       markers[i].like
@@ -226,11 +235,13 @@ function getmarkers(markers) {
       markers[i].end_time
     }</b><br/><br/><img style='width:341px;height:200px;margin-left:-20px' src='/images/house${
       markers[i].id
-    }.jpeg' /><br/><br/><i class="fas fa-heart saveBtn" onclick=\"saveProperty(${
+    }.jpeg' /><br/><br/><i id="fav_${markers[i].id}" save="${
+      markers[i].saved
+    }" class="fas fa-heart ${markers[i].saveBtn} " onclick=\"saveProperty(${
       markers[i].id
-    })\"></i><i id='likeimage_${
-      markers[i].id
-    }' class="fas fa-thumbs-up likeBtn" style='margin-left:20px;magin-top:-30px;' onclick=\"likeProperty(${
+    })\"></i><i id='likeimage_${markers[i].id}' class="fas fa-thumbs-up ${
+      markers[i].likeBtn
+    } " style='margin-left:20px;magin-top:-30px;' onclick=\"likeProperty(${
       markers[i].id
     },${markers[i].event_id})\")></i><label id='like_${markers[i].id}' like='${
       markers[i].like
@@ -293,8 +304,7 @@ function saveProperty(id) {
         id,
       }),
       headers: { "Content-Type": "application/json" },
-    })
-      .then(() => showMessage("Property added to favorites."));
+    }).then(() => showMessage("Property added to favorites."));
   }
 }
 

@@ -104,6 +104,10 @@ router.post("/search/", withAuth, async (req, res) => {
           model: Review,
           attributes: ["user_id", "property_id", "event_like"],
         },
+        {
+          model: savedProperties,
+          attributes: ["id", "property_id", "user_id"],
+        },
       ],
     });
 
@@ -163,9 +167,11 @@ router.get("/saved/", withAuth, async (req, res) => {
       let reviews = propertyData[i]["property"]["reviews"].length;
       let reviewdata = propertyData[i]["property"]["reviews"];
       let like = "like";
+      let likeBtn = "likeBtn";
       for (let j = 0; j < reviewdata.length; j++) {
         if (reviewdata[j]["user_id"] == req.session.user_id) {
           like = "liked";
+          likeBtn = "likedBtn";
         }
       }
 
@@ -195,6 +201,7 @@ router.get("/saved/", withAuth, async (req, res) => {
       }
       marker.reviews = reviews;
       marker.like = like;
+      marker.likeBtn = likeBtn;
       output.push(marker);
     }
     res.json(output);
@@ -205,6 +212,7 @@ router.get("/saved/", withAuth, async (req, res) => {
 });
 
 function radiusSearch(propertyData, lat, lng, user_id, radius) {
+  console.log(JSON.stringify(propertyData));
   let output = [];
   for (let i = 0; i < propertyData.length; i++) {
     let R = 6371; // Radius of the earth in km
@@ -221,9 +229,11 @@ function radiusSearch(propertyData, lat, lng, user_id, radius) {
     let reviews = propertyData[i]["reviews"].length;
     let reviewdata = propertyData[i]["reviews"];
     let like = "like";
+    let likeBtn = "likeBtn";
     for (let j = 0; j < reviewdata.length; j++) {
       if (reviewdata[j]["user_id"] == user_id) {
         like = "liked";
+        likeBtn = "likedBtn";
       }
     }
     if (d < radius) {
@@ -249,6 +259,20 @@ function radiusSearch(propertyData, lat, lng, user_id, radius) {
       }
       marker.reviews = reviews;
       marker.like = like;
+      marker.likeBtn = likeBtn;
+      let saved = 0;
+      let saveBtn = "saveBtn";
+      if (propertyData[i]["savedproperties"].length > 0) {
+        let savedata = propertyData[i]["savedproperties"].length;
+        for (let s = 0; s < savedata.length; s++) {
+          if (savedata[s]["user_id"] == user_id) {
+            saved = 1;
+            saveBtn = "savedBtn";
+          }
+        }
+      }
+      marker.saved = saved;
+      marker.saveBtn = saveBtn;
       output.push(marker);
     }
   }

@@ -17,6 +17,10 @@ savedProperties.belongsTo(Properties, {
   foreignKey: "property_id",
 });
 
+Properties.hasMany(savedProperties, {
+  foreignKey: "property_id",
+});
+
 Eventtypes.belongsTo(User, {
   foreignKey: "user_id",
 });

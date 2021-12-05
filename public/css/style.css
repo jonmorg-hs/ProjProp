@@ -150,6 +150,23 @@ button:hover {
   color: #3486eb;
 }
 
+.savedBtn {
+  font-size: 25px;
+  cursor: pointer;
+  color: #fe5d65;
+}
+.savedBtn:hover {
+  color: #fe5d65;
+}
+.likedBtn {
+  font-size: 25px;
+  cursor: pointer;
+  color: #3486eb;
+}
+.likedBtn:hover {
+  color: #3486eb;
+}
+
 .post-list {
   margin: 0;
   padding: 0;
