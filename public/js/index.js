@@ -305,7 +305,7 @@ function saveProperty(id) {
       headers: { "Content-Type": "application/json" },
     })
       .then((response) => response.json())
-      .then((response) => showMessage("Property Liked"));
+      .then((response) => showMessage("Property saved"));
   }
 }
 
@@ -405,7 +405,7 @@ function locError(error) {
       );
       break;
     case error.TIMEOUT:
-      showMessgae("gps timeout");
+      showMessage("gps timeout");
       wpid = navigator.geolocation.getCurrentPosition(
         displayAndWatch,
         locError,
@@ -472,3 +472,19 @@ let halloweend_sound = new Howl({
   autoplay: false,
   volume: 0.6,
 });
+
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", function () {
+    navigator.serviceWorker.register("../serviceworker.js").then(
+      function (registration) {
+        console.log(
+          "ServiceWorker registration successful with scope: ",
+          registration.scope
+        );
+      },
+      function (err) {
+        console.log("ServiceWorker registration failed: ", err);
+      }
+    );
+  });
+}
