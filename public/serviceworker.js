@@ -53,6 +53,11 @@ let urlsToCache = [
   "/views/signup.handlebars",
   "/views/update-event.handlebars",
 
+  "/dashboard/",
+  "/properties/",
+  "/users/",
+  "/home",
+
   "https://fonts.googleapis.com/css2?family=Kaushan+Script&display=swap",
   "https://kit.fontawesome.com/05c6b543c0.js",
   "/code.jquery.com/jquery-1.10.2.js",
