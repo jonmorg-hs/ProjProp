@@ -60,8 +60,7 @@ let baselayer = L.tileLayer(
   }
 ).addTo(map);
 
-
-function getIconForEvent(event_id,image,newSize,newmidoffset,newoffset){
+function getIconForEvent(layer, event_id, image, newSize, newmidoffset, newoffset) {
   return new L.Icon({
     id: layer.options.event_id,
     event_id: event_id,
@@ -79,29 +78,71 @@ map.on("zoomend", function () {
   let newmidoffset = newSize / 2;
   savedmapmarkers.eachLayer(function (layer) {
     if (layer.options.event_id == 1) {
-      xmasIcon = getIconForEvent(1,"xmas_tree.png",newSize,newmidoffset,newoffset);
+      xmasIcon = getIconForEvent(
+        layer,
+        1,
+        "xmas_tree.png",
+        newSize,
+        newmidoffset,
+        newoffset
+      );
       layer.setIcon(xmasIcon);
     }
     if (layer.options.event_id == 2) {
-      halloweenIcon = getIconForEvent(2,"halloween.png",newSize,newmidoffset,newoffset);
+      halloweenIcon = getIconForEvent(
+        layer,
+        2,
+        "halloween.png",
+        newSize,
+        newmidoffset,
+        newoffset
+      );
       layer.setIcon(halloweenIcon);
     }
     if (layer.options.event_id == 3) {
-      garagesaleIcon =  getIconForEvent(3,"garagesale.png",newSize,newmidoffset,newoffset);
+      garagesaleIcon = getIconForEvent(
+        layer,
+        3,
+        "garagesale.png",
+        newSize,
+        newmidoffset,
+        newoffset
+      );
       layer.setIcon(garagesaleIcon);
     }
   });
   mapmarkers.eachLayer(function (layer) {
     if (layer.options.event_id == 1) {
-      xmasIcon = getIconForEvent(1,"xmas_tree.png",newSize,newmidoffset,newoffset);
+      xmasIcon = getIconForEvent(
+        layer,
+        1,
+        "xmas_tree.png",
+        newSize,
+        newmidoffset,
+        newoffset
+      );
       layer.setIcon(xmasIcon);
     }
     if (layer.options.event_id == 2) {
-      halloweenIcon = getIconForEvent(2,"halloween.png",newSize,newmidoffset,newoffset);
+      halloweenIcon = getIconForEvent(
+        layer,
+        2,
+        "halloween.png",
+        newSize,
+        newmidoffset,
+        newoffset
+      );
       layer.setIcon(halloweenIcon);
     }
     if (layer.options.event_id == 3) {
-      garagesaleIcon =  getIconForEvent(3,"garagesale.png",newSize,newmidoffset,newoffset);
+      garagesaleIcon = getIconForEvent(
+        layer,
+        3,
+        "garagesale.png",
+        newSize,
+        newmidoffset,
+        newoffset
+      );
       layer.setIcon(garagesaleIcon);
     }
   });
@@ -235,13 +276,10 @@ function onClick() {
 }
 
 function toggleMenu(display) {
-  if (display === "hide") {
-    document.getElementById("menu").style.display = "none";
-    document.getElementById("menubtn").style.display = "block";
-  } else {
-    document.getElementById("menu").style.display = "block";
-    document.getElementById("menubtn").style.display = "none";
-  }
+  document.getElementById("menu").style.display =
+    display === "hide" ? "none" : "block";
+  document.getElementById("menubtn").style.display =
+    display === "hide" ? "block" : "none";
 }
 
 function saveProperty(id) {
@@ -256,8 +294,8 @@ function saveProperty(id) {
       }),
       headers: { "Content-Type": "application/json" },
     })
-      .then((response) => response.json())
-      .then((response) => showMessage("Property Liked"));
+      .then(() => showMessage("Property added to favorites."));
+
   }
 }
 
