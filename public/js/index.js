@@ -12,39 +12,21 @@ let currentposmarker = new L.LayerGroup();
 let mapmarkers = new L.LayerGroup();
 let savedmapmarkers = new L.LayerGroup();
 
-let myposIcon = L.icon({
-  iconUrl: "/images/pos.png",
-  iconSize: [10, 10],
-  iconAnchor: [5, 5],
-  popupAnchor: [0, -15],
-});
+function getIcon(image, iconSize, iconAnchor, popupAnchor) {
+  return L.icon({
+    id: "",
+    event_id: "",
+    iconUrl: `/images/${image}`,
+    iconSize: iconSize,
+    iconAnchor: iconAnchor,
+    popupAnchor: popupAnchor,
+  });
+}
 
-let xmasIcon = L.icon({
-  id: "",
-  event_id: "",
-  iconUrl: "/images/xmas_tree.png",
-  iconSize: [50, 50],
-  iconAnchor: [25, 50],
-  popupAnchor: [0, -55],
-});
-
-let halloweenIcon = L.icon({
-  id: "",
-  event_id: "",
-  iconUrl: "/images/halloween.png",
-  iconSize: [50, 50],
-  iconAnchor: [25, 50],
-  popupAnchor: [0, -55],
-});
-
-let garagesaleIcon = L.icon({
-  id: "",
-  event_id: "",
-  iconUrl: "/images/garagesale.png",
-  iconSize: [50, 50],
-  iconAnchor: [25, 50],
-  popupAnchor: [0, -55],
-});
+let myposIcon = getIcon("pos.png", [10, 10], [5, 5], [0, -15]);
+let xmasIcon = getIcon("xmas_tree.png", [50, 50], [25, 50], [0, -55]);
+let halloweenIcon = getIcon("halloween.png", [50, 50], [25, 50], [0, -55]);
+let garagesaleIcon = getIcon("garagesale.png", [50, 50], [25, 50], [0, -55]);
 
 let route_pts = [];
 
@@ -78,6 +60,17 @@ let baselayer = L.tileLayer(
   }
 ).addTo(map);
 
+function getIconForEvent(layer, event_id, image, newSize, newmidoffset, newoffset) {
+  return new L.Icon({
+    id: layer.options.event_id,
+    event_id: event_id,
+    iconUrl: `/images/${image}`,
+    iconSize: [newSize, newSize],
+    iconAnchor: [newmidoffset, newSize],
+    popupAnchor: [0, newoffset],
+  });
+}
+
 map.on("zoomend", function () {
   let currentZoom = map.getZoom();
   let newSize = markerscales[currentZoom];
@@ -85,71 +78,71 @@ map.on("zoomend", function () {
   let newmidoffset = newSize / 2;
   savedmapmarkers.eachLayer(function (layer) {
     if (layer.options.event_id == 1) {
-      xmasIcon = new L.Icon({
-        id: layer.options.event_id,
-        event_id: 1,
-        iconUrl: "/images/xmas_tree.png",
-        iconSize: [newSize, newSize],
-        iconAnchor: [newmidoffset, newSize],
-        popupAnchor: [0, newoffset],
-      });
+      xmasIcon = getIconForEvent(
+        layer,
+        1,
+        "xmas_tree.png",
+        newSize,
+        newmidoffset,
+        newoffset
+      );
       layer.setIcon(xmasIcon);
     }
     if (layer.options.event_id == 2) {
-      halloweenIcon = new L.Icon({
-        id: layer.options.event_id,
-        event_id: 2,
-        iconUrl: "/images/halloween.png",
-        iconSize: [newSize, newSize],
-        iconAnchor: [newmidoffset, newSize],
-        popupAnchor: [0, newoffset],
-      });
+      halloweenIcon = getIconForEvent(
+        layer,
+        2,
+        "halloween.png",
+        newSize,
+        newmidoffset,
+        newoffset
+      );
       layer.setIcon(halloweenIcon);
     }
     if (layer.options.event_id == 3) {
-      garagesaleIcon = new L.Icon({
-        id: layer.options.event_id,
-        event_id: 3,
-        iconUrl: "/images/garagesale.png",
-        iconSize: [newSize, newSize],
-        iconAnchor: [newmidoffset, newSize],
-        popupAnchor: [0, newoffset],
-      });
+      garagesaleIcon = getIconForEvent(
+        layer,
+        3,
+        "garagesale.png",
+        newSize,
+        newmidoffset,
+        newoffset
+      );
       layer.setIcon(garagesaleIcon);
     }
   });
   mapmarkers.eachLayer(function (layer) {
     if (layer.options.event_id == 1) {
-      xmasIcon = new L.Icon({
-        id: layer.options.event_id,
-        event_id: 1,
-        iconUrl: "/images/xmas_tree.png",
-        iconSize: [newSize, newSize],
-        iconAnchor: [newmidoffset, newSize],
-        popupAnchor: [0, newoffset],
-      });
+      xmasIcon = getIconForEvent(
+        layer,
+        1,
+        "xmas_tree.png",
+        newSize,
+        newmidoffset,
+        newoffset
+      );
       layer.setIcon(xmasIcon);
     }
     if (layer.options.event_id == 2) {
-      halloweenIcon = new L.Icon({
-        id: layer.options.event_id,
-        event_id: 2,
-        iconUrl: "/images/halloween.png",
-        iconSize: [newSize, newSize],
-        iconAnchor: [newmidoffset, newSize],
-        popupAnchor: [0, newoffset],
-      });
+      halloweenIcon = getIconForEvent(
+        layer,
+        2,
+        "halloween.png",
+        newSize,
+        newmidoffset,
+        newoffset
+      );
       layer.setIcon(halloweenIcon);
     }
     if (layer.options.event_id == 3) {
-      garagesaleIcon = new L.Icon({
-        id: layer.options.event_id,
-        event_id: 3,
-        iconUrl: "/images/garagesale.png",
-        iconSize: [newSize, newSize],
-        iconAnchor: [newmidoffset, newSize],
-        popupAnchor: [0, newoffset],
-      });
+      garagesaleIcon = getIconForEvent(
+        layer,
+        3,
+        "garagesale.png",
+        newSize,
+        newmidoffset,
+        newoffset
+      );
       layer.setIcon(garagesaleIcon);
     }
   });
@@ -283,13 +276,10 @@ function onClick() {
 }
 
 function toggleMenu(display) {
-  if (display === "hide") {
-    document.getElementById("menu").style.display = "none";
-    document.getElementById("menubtn").style.display = "block";
-  } else {
-    document.getElementById("menu").style.display = "block";
-    document.getElementById("menubtn").style.display = "none";
-  }
+  document.getElementById("menu").style.display =
+    display === "hide" ? "none" : "block";
+  document.getElementById("menubtn").style.display =
+    display === "hide" ? "block" : "none";
 }
 
 function saveProperty(id) {
@@ -304,8 +294,8 @@ function saveProperty(id) {
       }),
       headers: { "Content-Type": "application/json" },
     })
-      .then((response) => response.json())
-      .then((response) => showMessage("Property Liked"));
+      .then(() => showMessage("Property added to favorites."));
+
   }
 }
 
