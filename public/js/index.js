@@ -12,39 +12,21 @@ let currentposmarker = new L.LayerGroup();
 let mapmarkers = new L.LayerGroup();
 let savedmapmarkers = new L.LayerGroup();
 
-let myposIcon = L.icon({
-  iconUrl: "/images/pos.png",
-  iconSize: [10, 10],
-  iconAnchor: [5, 5],
-  popupAnchor: [0, -15],
-});
+function getIcon(image, iconSize, iconAnchor, popupAnchor) {
+  return L.icon({
+    id: "",
+    event_id: "",
+    iconUrl: `/images/${image}`,
+    iconSize: iconSize,
+    iconAnchor: iconAnchor,
+    popupAnchor: popupAnchor,
+  });
+}
 
-let xmasIcon = L.icon({
-  id: "",
-  event_id: "",
-  iconUrl: "/images/xmas_tree.png",
-  iconSize: [50, 50],
-  iconAnchor: [25, 50],
-  popupAnchor: [0, -55],
-});
-
-let halloweenIcon = L.icon({
-  id: "",
-  event_id: "",
-  iconUrl: "/images/halloween.png",
-  iconSize: [50, 50],
-  iconAnchor: [25, 50],
-  popupAnchor: [0, -55],
-});
-
-let garagesaleIcon = L.icon({
-  id: "",
-  event_id: "",
-  iconUrl: "/images/garagesale.png",
-  iconSize: [50, 50],
-  iconAnchor: [25, 50],
-  popupAnchor: [0, -55],
-});
+let myposIcon = getIcon("pos.png", [10, 10], [5, 5], [0, -15]);
+let xmasIcon = getIcon("xmas_tree.png", [50, 50], [25, 50], [0, -55]);
+let halloweenIcon = getIcon("halloween.png", [50, 50], [25, 50], [0, -55]);
+let garagesaleIcon = getIcon("garagesale.png", [50, 50], [25, 50], [0, -55]);
 
 let route_pts = [];
 

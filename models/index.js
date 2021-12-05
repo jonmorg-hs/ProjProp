@@ -5,8 +5,6 @@ const Events = require("./Events");
 const Review = require("./Review");
 const savedProperties = require("./savedProperties");
 
-//create associations
-
 Properties.belongsTo(User, {
   foreignKey: "user_id",
 });
@@ -23,13 +21,13 @@ Eventtypes.belongsTo(User, {
   foreignKey: "user_id",
 });
 
-Properties.hasMany(Review,{
+Properties.hasMany(Review, {
   foreignKey: "property_id",
 });
 
-Review.belongsTo(Properties,{
-foreignKey: "property_id",
-})
+Review.belongsTo(Properties, {
+  foreignKey: "property_id",
+});
 
 Review.hasMany(Events, {
   foreignKey: "event_id",

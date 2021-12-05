@@ -6,14 +6,14 @@ class Eventtypes extends Model {}
 Eventtypes.init(
   {
     id: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        primaryKey: true,
-        autoIncrement: true,
-    },  
-    title:{
-        type: DataTypes.STRING,
-        allowNull:false,
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    title: {
+      type: DataTypes.STRING,
+      allowNull: false,
     },
   },
   {
