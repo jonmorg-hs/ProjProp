@@ -42,6 +42,7 @@ let urlsToCache = [
   "/images/trash.png",
   "/images/tree.png",
   "/images/xmas_tree.png",
+  "/images/backyard-Edited.jpg",
   "/views/layout/main.handlebars",
   "/views/partials/favourites.handlebars",
   "/views/create-event.handlebars",
