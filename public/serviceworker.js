@@ -98,13 +98,39 @@ self.addEventListener("install", function (event) {
 //  );
 //});
 
+self.addEventListener("install", function (event) {
+  console.log("Service Worker installing");
+  self.skipWaiting();
+  event.waitUntil(
+    caches.open(CACHE_NAME).then(function (cache) {
+      console.log("Opened cache");
+      cache.addAll(urlsToCache);
+    })
+  );
+});
+
+//self.addEventListener('activate', function(event){
+//	console.log('Service Working activating');
+// event.waitUntil(
+//	caches.key().then(function(cacheNames){
+//	return Promise.all(
+//		cacheNames.filter(function(cacheName){
+//			//return true;
+//		}).map(function(cacheName){
+// 		return caches.delete(cacheName);
+// 	   })
+//    );
+//   })
+//  );
+//});
+
 self.addEventListener("activate", (event) => {
   // Remove old caches
   event.waitUntil(
     (async () => {
       const keys = await caches.keys();
       return keys.map(async (cache) => {
-        if (cache.indexOf("haulsmart_") == 0) {
+        if (cache.indexOf("myfrontyard_") == 0) {
           if (cache !== CACHE_NAME) {
             console.log("Service Worker: Removing old cache: " + cache);
             return await caches.delete(cache);
@@ -116,12 +142,36 @@ self.addEventListener("activate", (event) => {
 });
 
 self.addEventListener("fetch", function (event) {
-  if (event.request.destination == "" || event.request.destination == null) {
-    return;
+  let online = navigator.onLine;
+  if (!online) {
+    if (event.request.destination == "" || event.request.destination == null) {
+      return;
+    }
+    event.respondWith(
+      caches.match(event.request).then(function (response) {
+        if (response) {
+          return response;
+        }
+        requestBackend(event);
+      })
+    );
   }
-  event.respondWith(
-    caches.match(event.request).then(function (response) {
-      return response;
-    })
-  );
 });
+
+function requestBackend(event) {
+  var url = event.request.clone();
+  return fetch(url).then(function (res) {
+    //if not a valid response send the error
+    if (!res || res.status !== 200 || res.type !== "basic") {
+      return res;
+    }
+
+    var response = res.clone();
+
+    caches.open(CACHE_VERSION).then(function (cache) {
+      cache.put(event.request, response);
+    });
+
+    return res;
+  });
+}
