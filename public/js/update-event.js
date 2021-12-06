@@ -34,7 +34,6 @@ function updateeventHandler(event) {
       .then((response) => {
         response.json();
         console.log("UPDATED EVENT", response);
-        // showMessage("Event updated");
       })
       .then((response) => showMessage("Event updated"));
   }

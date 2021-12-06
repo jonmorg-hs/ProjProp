@@ -20,7 +20,6 @@ async function loginFormHandler(event) {
       alert(
         "Login credentials do not exist, please sign up or check your username or password"
       );
-      //alert(response.statusText);
     }
   }
 }

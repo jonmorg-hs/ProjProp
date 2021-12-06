@@ -1,10 +1,8 @@
 const { Model, DataTypes } = require("sequelize");
 const sequelize = require("../config/connection");
 
-// create our Post model
 class savedProperties extends Model {}
 
-// create fields/columns for Post model
 savedProperties.init(
   {
     id: {

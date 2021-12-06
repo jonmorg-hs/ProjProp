@@ -456,7 +456,6 @@ function locError(error) {
       );
       break;
     case error.TIMEOUT:
-      //showMessage("gps timeout");
       wpid = navigator.geolocation.getCurrentPosition(
         displayAndWatch,
         locError,
@@ -464,7 +463,6 @@ function locError(error) {
       );
       break;
     case error.UNKNOWN_ERROR:
-      //showMessage("unknown gps error");
       wpid = navigator.geolocation.getCurrentPosition(
         displayAndWatch,
         locError,
