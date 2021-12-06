@@ -273,7 +273,9 @@ function radiusSearch(propertyData, lat, lng, user_id, radius) {
       }
       marker.saved = saved;
       marker.saveBtn = saveBtn;
-      output.push(marker);
+      if (saved == 0) {
+        output.push(marker);
+      }
     }
   }
   return output;

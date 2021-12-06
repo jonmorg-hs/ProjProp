@@ -1,4 +1,4 @@
-let CACHE_NAME = "myfrontyard_cache2";
+let CACHE_NAME = "myfrontyard_cache6";
 
 let urlsToCache = [
   "/",
@@ -61,8 +61,8 @@ let urlsToCache = [
 
   "https://fonts.googleapis.com/css2?family=Kaushan+Script&display=swap",
   "https://kit.fontawesome.com/05c6b543c0.js",
-  "/code.jquery.com/jquery-1.10.2.js",
-  "//code.jquery.com/ui/1.11.4/jquery-ui.js",
+  "https://code.jquery.com/jquery-1.10.2.js",
+  "https://code.jquery.com/ui/1.11.4/jquery-ui.js",
   "https://unpkg.com/leaflet@1.7.1/dist/leaflet.css",
   "https://unpkg.com/leaflet.markercluster@1.3.0/dist/MarkerCluster.css",
   "https://unpkg.com/leaflet.markercluster@1.3.0/dist/MarkerCluster.Default.css",

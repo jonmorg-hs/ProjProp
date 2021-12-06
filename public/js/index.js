@@ -11,6 +11,7 @@ let markerscales = [
 let currentposmarker = new L.LayerGroup();
 let mapmarkers = new L.LayerGroup();
 let savedmapmarkers = new L.LayerGroup();
+let markers;
 
 function getIcon(image, iconSize, iconAnchor, popupAnchor) {
   return L.icon({
@@ -297,18 +298,47 @@ function saveProperty(id) {
   if ($("#fav_" + id).attr("save") * 1 === 1) {
     showMessage("Property already a favorite");
   } else {
-    $("#fav_" + id).attr({ save: 1, src: "/images/saved.png" });
+    $("#fav_" + id)
+      .attr({ save: 1 })
+      .removeClass("saveBtn")
+      .addClass("savedBtn");
     fetch("/api/properties/save/", {
       method: "post",
       body: JSON.stringify({
         id,
       }),
       headers: { "Content-Type": "application/json" },
-    }).then(() => showMessage("Property added to favorites."));
+    })
+      .then(() => showMessage("Property added to favorites."))
+      .then(() => regetmarkers());
   }
 }
 
+function regetmarkers() {
+  const radius = document.querySelector('input[id="radius-search"]').value;
+  const event_id = document.querySelector('select[id="event-search"]').value;
+  const lat = currentlat;
+  const lng = currentlng;
+  fetch("/api/properties/search", {
+    method: "post",
+    body: JSON.stringify({
+      radius,
+      lat,
+      lng,
+      event_id,
+    }),
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => response.json())
+    .then((response) => getmarkers(response))
+    .then(() => savedmarkers());
+}
+
 function showMessage(message) {
+  $("#menu").scrollTop(0).show();
   $("#message").html(message);
   setTimeout(function () {
     $("#message").html("");
@@ -326,12 +356,16 @@ function likeProperty(property_id) {
     let newlikes = likes + 1;
     $("#like_" + property_id).html(newlikes);
     $("#like_" + property_id).attr("like", "liked");
-    $("#likeimage_" + property_id).attr("src", "/images/liked.png");
+    $("#likeimage_" + property_id)
+      .removeClass("likeBtn")
+      .addClass("likedBtn");
     let dashlikes = $("#dlike_" + property_id).text() * 1;
     let dashnewlikes = dashlikes + 1;
     $("#dlike_" + property_id).html(dashnewlikes);
     $("#dlike_" + property_id).attr("like", "liked");
-    $("#dlikeimage_" + property_id).attr("src", "/images/liked.png");
+    $("#dlikeimage_" + property_id)
+      .removeClass("likeBtn")
+      .addClass("likedBtn");
     fetch("/api/properties/like/", {
       method: "post",
       body: JSON.stringify({
@@ -404,7 +438,7 @@ function locError(error) {
       );
       break;
     case error.TIMEOUT:
-      showMessage("gps timeout");
+      //showMessage("gps timeout");
       wpid = navigator.geolocation.getCurrentPosition(
         displayAndWatch,
         locError,
@@ -412,7 +446,7 @@ function locError(error) {
       );
       break;
     case error.UNKNOWN_ERROR:
-      showMessage("unknown gps error");
+      //showMessage("unknown gps error");
       wpid = navigator.geolocation.getCurrentPosition(
         displayAndWatch,
         locError,
