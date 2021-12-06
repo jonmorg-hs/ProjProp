@@ -535,6 +535,6 @@ if ("serviceWorker" in navigator) {
 }
 
 window.addEventListener("touchstart", () => {
-  document.getElementById("audio").muted = false;
+  document.getElementById("audio").muted = true;
   document.getElementById("audio").play();
 });
