@@ -221,6 +221,7 @@ function getsavedmarkers(markers, property_id) {
         icon: mapIcon,
         id: markers[i]["id"],
         event_id: markers[i]["event_id"],
+        tap: false,
       })
         .addTo(map)
         .on("click", onClick)
@@ -274,6 +275,7 @@ function getmarkers(markers) {
       icon: mapIcon,
       id: markers[i]["id"],
       event_id: markers[i]["event_id"],
+      tap: false,
     })
       .addTo(map)
       .on("click", onClick)
