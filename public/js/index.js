@@ -533,9 +533,3 @@ if ("serviceWorker" in navigator) {
     );
   });
 }
-
-window.addEventListener("touchstart", () => {
-  document.getElementById("audio").muted = false;
-  $(".audio").volume = 0.1;
-  document.getElementById("audio").play();
-});

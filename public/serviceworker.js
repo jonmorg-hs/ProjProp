@@ -1,4 +1,4 @@
-let CACHE_NAME = "myfrontyard_cache8";
+let CACHE_NAME = "myfrontyard_cache9";
 
 let urlsToCache = [
   "/",
