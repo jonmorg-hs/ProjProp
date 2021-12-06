@@ -352,7 +352,10 @@ function regetmarkers(property_id) {
 }
 
 function showMessage(message) {
-  $("#menu").scrollTop(0).show();
+  $("#menu").scrollTop(0);
+  if ($(window).width() > 600) {
+    $("#menu").show();
+  }
   $("#message").html(message);
   setTimeout(function () {
     $("#message").html("");
@@ -388,7 +391,8 @@ function likeProperty(property_id) {
       headers: { "Content-Type": "application/json" },
     })
       .then((response) => response.json())
-      .then((response) => showMessage("Property Liked"));
+      .then((response) => showMessage("Property Liked"))
+      .then(() => regetmarkers(id));
   }
 }
 
