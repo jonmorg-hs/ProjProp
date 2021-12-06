@@ -160,16 +160,16 @@ currentposmarker.addTo(map);
 mapmarkers.addTo(map);
 savedmapmarkers.addTo(map);
 
-function savedmarkers() {
+function savedmarkers(property_id) {
   fetch("/api/properties/saved/", {
     method: "get",
     headers: { Accept: "application/json", "Content-Type": "application/json" },
   })
     .then((response) => response.json())
-    .then((response) => getsavedmarkers(response));
+    .then((response) => getsavedmarkers(response, property_id));
 }
 
-function getsavedmarkers(markers) {
+function getsavedmarkers(markers, property_id) {
   savedmapmarkers.clearLayers();
   let searchmarkers = [];
   let marker, i;
@@ -206,14 +206,26 @@ function getsavedmarkers(markers) {
     } else {
       mapIcon = xmasIcon;
     }
-    marker = L.marker([markers[i]["lat"], markers[i]["lng"]], {
-      icon: mapIcon,
-      id: markers[i]["id"],
-      event_id: markers[i]["event_id"],
-    })
-      .addTo(map)
-      .on("click", onClick)
-      .bindPopup(html);
+    if (markers[i]["id"] === property_id) {
+      marker = L.marker([markers[i]["lat"], markers[i]["lng"]], {
+        icon: mapIcon,
+        id: markers[i]["id"],
+        event_id: markers[i]["event_id"],
+      })
+        .addTo(map)
+        .on("click", onClick)
+        .bindPopup(html)
+        .openPopup();
+    } else {
+      marker = L.marker([markers[i]["lat"], markers[i]["lng"]], {
+        icon: mapIcon,
+        id: markers[i]["id"],
+        event_id: markers[i]["event_id"],
+      })
+        .addTo(map)
+        .on("click", onClick)
+        .bindPopup(html);
+    }
     savedmapmarkers.addLayer(marker);
     searchmarkers.push(marker);
   }
@@ -310,11 +322,11 @@ function saveProperty(id) {
       headers: { "Content-Type": "application/json" },
     })
       .then(() => showMessage("Property added to favorites."))
-      .then(() => regetmarkers());
+      .then(() => regetmarkers(id));
   }
 }
 
-function regetmarkers() {
+function regetmarkers(property_id) {
   const radius = document.querySelector('input[id="radius-search"]').value;
   const event_id = document.querySelector('select[id="event-search"]').value;
   const lat = currentlat;
@@ -334,7 +346,7 @@ function regetmarkers() {
   })
     .then((response) => response.json())
     .then((response) => getmarkers(response))
-    .then(() => savedmarkers());
+    .then(() => savedmarkers(property_id));
 }
 
 function showMessage(message) {
